@@ -94,7 +94,7 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
             size--;
             return;
          }
-         else if (currNode.key.compareTo(key) < 0) {
+         else if (currNode.key.compareTo(key) > 0) {
             if (currNode.left == null) {
                currNode.left = newNode;
                newNode.parent = currNode;
@@ -132,7 +132,7 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
          if (currNode.key.equals(key)) {
             return currNode.value;
          }
-         else if (currNode.key.compareTo(key) < 0) {
+         else if (currNode.key.compareTo(key) > 0) {
             currNode = currNode.left;
          }
          else currNode = currNode.right;
@@ -178,57 +178,80 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
       if (head == null) {
          return null;
       }
+
       BSTNode<K,V> toRemove = head;
       while (toRemove != null) {
          if (toRemove.key.equals(key)) {
             break;
          }
-         else if (toRemove.key.compareTo(key) < 0) {
+         else if (toRemove.key.compareTo(key) > 0) {
             toRemove = toRemove.left;
          }
-         else toRemove = toRemove.right;
+         else {
+            toRemove = toRemove.right;
+         }
       }
-
+      
       if (toRemove == null) {
          return null;
       }
 
-      size--;
-
-      BSTNode<K,V> replacement = getPredecessor(toRemove);
-      if (replacement == null) {
-         replacement = getSuccessor(toRemove);
-         if (replacement == null) {
-            if (toRemove == head) {
-               head = null;
-            }
-            else if (toRemove.parent.left == toRemove) {
-               toRemove.parent.left = null;
-            }
-            else {
-               toRemove.parent.right = null;
-            }
-            return toRemove.value;
+      BSTNode<K,V> replace = getSuccessor(toRemove);
+      if (replace == null) replace = getPredecessor(toRemove);
+      if (replace == null) {
+         if (head == toRemove) {
+            head = null;
          }
+         else if (toRemove.parent.left == toRemove) {
+            toRemove.parent.left = null;
+         }
+         else {
+            toRemove.parent.right = null;
+         }
+         size--;
+         return toRemove.value;
       }
 
-      V oldValue = toRemove.value;
-      toRemove.value = replacement.value;
-      toRemove.key = replacement.key;
+      V retVal = toRemove.value;
+      toRemove.value = replace.value;
+      toRemove.key = replace.key;
 
-      if (replacement.parent.right == replacement) {
-         if (replacement.left == null) {
-            replacement.parent.right = replacement.right;
+      if (replace.parent.left == replace) {
+         if (replace.right == null) {
+            replace.parent.left = replace.left;
          }
-         else replacement.parent.right = replacement.left;
+         else {
+            replace.parent.left = replace.right;
+         }
       }
       else {
-         if (replacement.right == null) {
-            replacement.parent.left = replacement.left;
+         if (replace.left == null) {
+            replace.parent.right = replace.right;
          }
-         else replacement.parent.left = replacement.right;
+         else {
+            replace.parent.right = replace.left;
+         }
       }
-      return oldValue;
+      
+      size--;
+      return retVal;
+   }
+
+   private void printInOrderHelper(BSTNode<K,V> c) {
+      if (c == null) return;
+
+      printInOrderHelper(c.left);
+      System.out.print("<" + c.key.toString() + "," + c.value.toString() + "> ");
+      printInOrderHelper(c.right);
+   }
+
+   /**
+    * Print the contents of the binary search tree
+    * in the order of the key values
+    */
+   public void printInOrder() {
+      printInOrderHelper(head);
+      System.out.println();
    }
 
 }
