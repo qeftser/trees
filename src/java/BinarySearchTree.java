@@ -7,7 +7,7 @@
  *
  * @author Caleb Pollock
  */
-public class BinarySearchTree<K extends Comparable<K>,V> {
+public class BinarySearchTree<K extends Comparable<K>,V> implements BinaryTreeInterface<K,V> {
 
    private int size;
    private int depth; /* this will only really grow - there is not a good way to decrease it */
@@ -29,22 +29,6 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
          right = null;
          left = null;
       }
-
-      BSTNode(K key) {
-         this.key = key;
-         this.value = null;
-         parent = null;
-         right = null;
-         left = null;
-      }
-
-      BSTNode() {
-         this.key = null;
-         this.value = null;
-         parent = null;
-         right = null;
-         left = null;
-      }
    }
 
    BinarySearchTree() {
@@ -55,28 +39,14 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
       head = null;
    }
 
-   /**
-    * @return int - total elements in tree
-    */
    public int getSize() {
       return this.size;
    }
 
-   /**
-    * @return int - the highest depth the tree has reached
-    * @note May not return the current depth of the tree.
-    */
    public int getDepth() {
       return this.depth;
    }
 
-   /**
-    * Adds the given value to the tree under the given key.
-    * If the given key already exists the value held is
-    * updated
-    * @param key - the key to store the value under
-    * @param value - the value to store
-    */
    public void add(K key, V value) {
       BSTNode<K,V> newNode = new BSTNode<K,V>(key,value);
       int currDepth = 0;
@@ -117,10 +87,6 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
       }
    }
 
-   /**
-    * @return The value associated with the given key, or null if the key is not found
-    * @param key - the key to search for
-    */
    public V get(K key) {
       if (head == null || key == null) {
          return null;
@@ -141,10 +107,6 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
       return null;
    }
 
-   /**
-    * @return the node that is the predecessor to the given node
-    * @param start - the node to search from
-    */
    private BSTNode<K,V> getPredecessor(BSTNode<K,V> start) {
       if (start == null || start.left == null) return null;
       BSTNode<K,V> currNode = start.left;
@@ -155,10 +117,6 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
       return currNode;
    }
 
-   /**
-    * @return the node that is the successor to the given node
-    * @param start - the node to search from
-    */
    private BSTNode<K,V> getSuccessor(BSTNode<K,V> start) {
       if (start == null || start.right == null) return null;
       BSTNode<K,V> currNode = start.right;
@@ -169,11 +127,6 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
       return currNode;
    }
 
-   /**
-    * Removes the node under the given key from the tree
-    * @param key - the key to search for
-    * @return the value of the node removed, or null if the given key was not present in the tree
-    */
    public V remove(K key) {
       if (head == null) {
          return null;
@@ -270,17 +223,11 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
    private void printInOrderHelper(BSTNode<K,V> c) {
       if (c == null) return;
 
-      System.out.print("l");
       printInOrderHelper(c.left);
       System.out.print("<" + c.key.toString() + "," + c.value.toString() + "> ");
-      System.out.print("r");
       printInOrderHelper(c.right);
    }
 
-   /**
-    * Print the contents of the binary search tree
-    * in the order of the key values
-    */
    public void printInOrder() {
       printInOrderHelper(head);
       System.out.println();
