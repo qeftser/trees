@@ -203,32 +203,62 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
             head = null;
          }
          else if (toRemove.parent.left == toRemove) {
-            toRemove.parent.left = null;
+            if (toRemove.parent.key == head.key) {
+              head.left = null;
+            }
+            else {
+               toRemove.parent.left = null;
+            }
          }
          else {
-            toRemove.parent.right = null;
+            if (toRemove.parent.key == head.key) {
+               head.right = null;
+            }
+            else {
+               toRemove.parent.right = null;
+            }
          }
          size--;
          return toRemove.value;
       }
 
       V retVal = toRemove.value;
-      toRemove.value = replace.value;
-      toRemove.key = replace.key;
 
       if (replace.parent.left == replace) {
          if (replace.right == null) {
-            replace.parent.left = replace.left;
+            if (replace.parent.key == head.key) {
+               toRemove.value = replace.value;
+               toRemove.key = replace.key;
+               head.left = replace.left;
+            }
+            else {
+               toRemove.value = replace.value;
+               toRemove.key = replace.key;
+               replace.parent.left = replace.left;
+            }
          }
          else {
+            toRemove.value = replace.value;
+            toRemove.key = replace.key;
             replace.parent.left = replace.right;
          }
       }
       else {
          if (replace.left == null) {
-            replace.parent.right = replace.right;
+            if (replace.parent.key == head.key) {
+               toRemove.value = replace.value;
+               toRemove.key = replace.key;
+               head.right = replace.right;
+            }
+            else {
+               toRemove.value = replace.value;
+               toRemove.key = replace.key;
+               replace.parent.right = replace.right;
+            }
          }
          else {
+            toRemove.value = replace.value;
+            toRemove.key = replace.key;
             replace.parent.right = replace.left;
          }
       }
@@ -240,8 +270,10 @@ public class BinarySearchTree<K extends Comparable<K>,V> {
    private void printInOrderHelper(BSTNode<K,V> c) {
       if (c == null) return;
 
+      System.out.print("l");
       printInOrderHelper(c.left);
       System.out.print("<" + c.key.toString() + "," + c.value.toString() + "> ");
+      System.out.print("r");
       printInOrderHelper(c.right);
    }
 

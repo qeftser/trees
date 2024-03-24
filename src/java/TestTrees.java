@@ -25,14 +25,14 @@ class TestTrees {
    }
 
    @Test
-   public void testGetEmpty() {
+   public void testGetEmptyBST() {
       assertEquals(bst.get(5),null);
       assertEquals(bst.get(7),null);
       assertEquals(bst.get(null),null);
    }
 
    @Test
-   public void testAdd() {
+   public void testAddBST() {
       bst.add(5,5);
       assertEquals(1,bst.getSize());
       assertEquals(0,bst.getDepth());
@@ -63,7 +63,7 @@ class TestTrees {
    }
 
    @Test 
-   public void testGet() {
+   public void testGetBST() {
       bst.add(5,5);
       bst.add(7,5);
       bst.add(5,7);
@@ -89,7 +89,7 @@ class TestTrees {
    }
 
    @Test
-   public void testRemoveNoChildren() {
+   public void testRemoveNoChildrenBST() {
       bst.add(5,5);
       bst.add(7,5);
       bst.add(5,7);
@@ -125,7 +125,7 @@ class TestTrees {
    }
 
    @Test
-   public void testRemove() {
+   public void testRemoveBST() {
       bst.add(5,5);
       bst.add(7,7);
       bst.add(4,4);
@@ -138,6 +138,7 @@ class TestTrees {
       bst.add(6,6);
       bst.add(8,8);
 
+      bst.printInOrder();
       assertEquals(11,bst.getSize());
       assertEquals(4,bst.remove(4));
       assertEquals(10,bst.getSize());
@@ -145,6 +146,7 @@ class TestTrees {
       assertEquals(3,bst.get(3));
       assertEquals(2,bst.get(2));
       assertEquals(3,bst.remove(3));
+      bst.printInOrder();
       assertEquals(9,bst.getSize());
       assertEquals(null,bst.get(3));
       assertEquals(2,bst.get(2));
@@ -154,6 +156,7 @@ class TestTrees {
       assertEquals(8,bst.getSize());
       assertEquals(null,bst.get(20));
       assertEquals(5,bst.remove(5));
+      bst.printInOrder();
       assertEquals(7,bst.getSize());
       assertEquals(null,bst.get(5));
       assertEquals(2,bst.get(2));
@@ -175,17 +178,21 @@ class TestTrees {
       assertEquals(8,bst.remove(8));
       assertEquals(3,bst.getSize());
       assertEquals(null,bst.get(8));
+      bst.printInOrder();
       assertEquals(2,bst.remove(2));
+      bst.printInOrder();
       assertEquals(2,bst.getSize());
       assertEquals(null,bst.get(2));
       assertEquals(1,bst.get(1));
       assertEquals(0,bst.get(0));
       assertEquals(0,bst.remove(0));
+      bst.printInOrder();
       assertEquals(1,bst.getSize());
       assertEquals(null,bst.get(0));
-      assertEquals(1,bet.get(1));
+      assertEquals(1,bst.get(1));
       assertEquals(1,bst.remove(1));
       assertEquals(0,bst.getSize());
+      bst.printInOrder();
       assertEquals(null,bst.get(1));
       assertEquals(null,bst.remove(1));
    }
