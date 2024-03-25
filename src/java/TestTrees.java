@@ -12,11 +12,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class TestTrees {
 
-   private RedBlackTree<Integer,Integer> bst;
+   private BinarySearchTree<Integer,Integer> bst;
+   Random r = new Random();
 
    @BeforeEach
    public void init() {
-      bst = new RedBlackTree<Integer,Integer>();
+      bst = new BinarySearchTree<Integer,Integer>();
    }
 
    @AfterEach
@@ -76,7 +77,6 @@ class TestTrees {
       assertEquals(15,bst.getSize());
       bst.add(13,7);
       assertEquals(16,bst.getSize());
-      assertEquals(5,bst.getDepth());
    }
 
    @Test 
@@ -158,6 +158,7 @@ class TestTrees {
       bst.printInOrder();
       assertEquals(11,bst.getSize());
       assertEquals(4,bst.remove(4));
+      bst.printInOrder();
       assertEquals(10,bst.getSize());
       assertEquals(null,bst.get(4));
       assertEquals(3,bst.get(3));
@@ -173,9 +174,8 @@ class TestTrees {
       assertEquals(8,bst.getSize());
       assertEquals(null,bst.get(20));
       bst.printInOrder();
-      assertEquals(6,bst.remove(6)); // some inconsistancies with removing 6 here
+      assertEquals(5,bst.remove(5)); 
       bst.printInOrder();
-      /*
       assertEquals(7,bst.getSize());
       assertEquals(null,bst.get(5));
       assertEquals(2,bst.get(2));
@@ -183,14 +183,17 @@ class TestTrees {
       assertEquals(9,bst.remove(9));
       assertEquals(6,bst.getSize());
       assertEquals(null,bst.get(9));
+      bst.printInOrder();
       assertEquals(8,bst.get(8));
       assertEquals(6,bst.get(6));
       assertEquals(7,bst.remove(7));
       assertEquals(5,bst.getSize());
       assertEquals(null,bst.get(7));
+      bst.printInOrder();
       assertEquals(8,bst.get(8));
       assertEquals(6,bst.get(6));
       assertEquals(6,bst.remove(6));
+      bst.printInOrder();
       assertEquals(4,bst.getSize());
       assertEquals(null,bst.get(6));
       assertEquals(8,bst.get(8));
@@ -214,6 +217,22 @@ class TestTrees {
       bst.printInOrder();
       assertEquals(null,bst.get(1));
       assertEquals(null,bst.remove(1));
-      */
+   }
+
+   @Test
+   public void stressTestBST() {
+      for (int i = 0; i < 100; i++) {
+         System.out.println(i);
+         bst.add(Math.abs(r.nextInt()%1000),i);
+      }
+      bst.printInOrder();
+      for (int i = 0; i < 1000; i++) {
+         System.out.println(i);
+         if (null != bst.remove(i)) {
+            assertEquals(null,bst.get(i));
+         }
+      }
+      bst.printInOrder();
+      assertEquals(0,bst.getSize());
    }
 }

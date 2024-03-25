@@ -65,8 +65,12 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
    }
 
    private void leftRotate(RBNode<K,V> x) {
+      System.out.println("lr");
       RBNode<K,V> y = x.right;
       x.right = y.left;
+      if (x.right != nil) {
+         x.right.parent = x;
+      }
       if (y.left != nil) {
          y.left.parent = x;
       }
@@ -83,8 +87,12 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
    }
 
    private void rightRotate(RBNode<K,V> x) {
+      System.out.println("rr");
       RBNode<K,V> y = x.left;
-      x.left = y.right;
+      x.left = y.right; 
+      if (x.left != nil) {
+         x.left.parent = x;
+      }
       if (y.right != nil) {
          y.left.parent = x;
       }
@@ -96,19 +104,22 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
          x.parent.right = y;
       }
       else x.parent.left = y;
-      y.right = x;
+      y.right = x; 
       x.parent = y;
    }
 
    private void addFixup(RBNode<K,V> z) {
       while (z.parent.color) { // is red - nil must be black for this to work
          if (z.parent == z.parent.parent.left) {
+         System.out.println("nahhhhhh - 2");
             RBNode<K,V> y = z.parent.parent.right;
             if (y.color) { // is red - now we have red with red child
+               System.out.println("asf");
                z.parent.color = false; // we fix by swapping the child colors
                y.color = false;        // of the grandfather to black and the
                z = z.parent.parent;    // grandfather to red. This implies we
                z.color = true;         // already know the grandfather is black
+               System.out.println("asffffffffffffff");
             }
             else if (z == z.parent.right) { // somehow we know that this violates condition 4
                z = z.parent;
@@ -127,12 +138,15 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
          }
          else {
             if (z.parent == z.parent.parent.right) {
+         System.out.println("nahhhhhh - 1");
                RBNode<K,V> y = z.parent.parent.left;
                if (y.color) { // is red
+                  System.out.println("asg");
                   z.parent.color = false; // same regardless of side
                   y.color = false;
                   z = z.parent.parent;
                   z.color = true;
+                  System.out.println("asggggggggggggg");
                }
                else if (z == z.parent.left) {
                   z = z.parent;
@@ -162,6 +176,7 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
       int currDepth = 0;
       size++;
       while (x != nil) {
+         System.out.println("nah");
          currDepth++;
          y = x;
          if (z.key.equals(x.key)) {
@@ -186,6 +201,7 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
       z.left = z.right = nil;
       z.color = true;
       addFixup(z);
+      System.out.println("sdafsfdsfas");
    }
 
    private void transplant(RBNode<K,V> u, RBNode<K,V> v) {
@@ -216,6 +232,7 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
                w.color = false;
                x.parent.color = true;
                leftRotate(x.parent);
+               w.right.parent = w;
                w = x.parent.right;
             }
             if (!w.left.color && !w.right.color) { // both black
@@ -235,20 +252,20 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
             }
             else {
                x = w.parent;
-               System.out.println(x.key+ ">>" + w.key);
                leftRotate(x);
                w.right.parent = w;
                w.left.color = w.right.color = false;
-               x = x.parent.parent.left;
+               w.color = true;
+               x = x.parent.parent;
             }
          }
          else {
             w = x.parent.left;
-            System.out.println(w.key);
             if (w.color) { // is red
                w.color = false;
                x.parent.color = true;
                rightRotate(x.parent);
+               w.left.parent = w; 
                w = x.parent.left;
             }
             if (!w.right.color && !w.left.color) { // both black
@@ -268,11 +285,11 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
             }
             else {
                x = w.parent;
-               System.out.println(x.key+ ">>" + w.key);
                rightRotate(x);
                w.left.parent = w;
                w.left.color = w.right.color = false;
-               x = x.parent.parent.right;
+               w.color = true;
+               x = x.parent.parent;
             }
          }
       }
@@ -302,6 +319,7 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
       if (z.left == nil) {
          x = z.right;
          transplant(z,z.right);
+         System.out.println(z.key + " " + z.parent.key);
       }
       else if (z.right == nil) {
          x = z.left;
@@ -335,7 +353,7 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
 
       System.out.print("l");
       printInOrderHelper(c.left);
-      System.out.print(c.color + "<" + c.key.toString() + "," + c.value.toString() + "> ");
+      System.out.print(c.color + "<" + c.key.toString() + "," + c.value.toString() + ">" + c.parent.key + " ");
       System.out.print("r");
       printInOrderHelper(c.right);
    }
