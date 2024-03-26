@@ -47,7 +47,7 @@ public class BinarySearchTree<K extends Comparable<K>,V> implements BinaryTreeIn
       return this.depth;
    }
 
-   public void add(K key, V value) {
+   public void insert(K key, V value) {
       BSTNode<K,V> newNode = new BSTNode<K,V>(key,value);
       int currDepth = 0;
       BSTNode<K,V> currNode = this.head;
@@ -127,7 +127,7 @@ public class BinarySearchTree<K extends Comparable<K>,V> implements BinaryTreeIn
       return currNode;
    }
 
-   public V remove(K key) {
+   public V delete(K key) {
       if (head == null) {
          return null;
       }

@@ -65,12 +65,8 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
    }
 
    private void leftRotate(RBNode<K,V> x) {
-      System.out.println("lr");
       RBNode<K,V> y = x.right;
       x.right = y.left;
-      if (x.right != nil) {
-         x.right.parent = x;
-      }
       if (y.left != nil) {
          y.left.parent = x;
       }
@@ -86,40 +82,33 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
       x.parent = y;
    }
 
-   private void rightRotate(RBNode<K,V> x) {
-      System.out.println("rr");
-      RBNode<K,V> y = x.left;
-      x.left = y.right; 
-      if (x.left != nil) {
-         x.left.parent = x;
+   private void rightRotate(RBNode<K,V> y) {
+      RBNode<K,V> x = y.left;
+      y.left = x.right;
+      if (x.right == nil) {
+         x.right.parent = y;
       }
-      if (y.right != nil) {
-         y.left.parent = x;
+      x.parent = y.parent;
+      if (y.parent == nil) {
+         head = x;
       }
-      y.parent = x.parent;
-      if (x.parent == nil) {
-         head = y;
+      else if (y == y.parent.left) {
+         y.parent.left = x;
       }
-      else if (x == x.parent.right) {
-         x.parent.right = y;
-      }
-      else x.parent.left = y;
-      y.right = x; 
-      x.parent = y;
+      else y.parent.right = x;
+      x.right = y;
+      y.parent = x;
    }
 
-   private void addFixup(RBNode<K,V> z) {
+   private void insertFixup(RBNode<K,V> z) {
       while (z.parent.color) { // is red - nil must be black for this to work
          if (z.parent == z.parent.parent.left) {
-         System.out.println("nahhhhhh - 2");
             RBNode<K,V> y = z.parent.parent.right;
             if (y.color) { // is red - now we have red with red child
-               System.out.println("asf");
                z.parent.color = false; // we fix by swapping the child colors
                y.color = false;        // of the grandfather to black and the
-               z = z.parent.parent;    // grandfather to red. This implies we
-               z.color = true;         // already know the grandfather is black
-               System.out.println("asffffffffffffff");
+               z.parent.parent.color = true; // grandfather to red. This implies we
+               z = z.parent.parent;     // already know the grandfather is black  
             }
             else if (z == z.parent.right) { // somehow we know that this violates condition 4
                z = z.parent;
@@ -129,46 +118,43 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
                rightRotate(z.parent.parent); // correct introduced violation
             }
             else {
-               z = z.parent;
-               rightRotate(z.parent);
-               z.left.parent = z;
-               z.color = false;
-               z.right.color = true;
+               z.parent.parent.color = true;
+               rightRotate(z.parent.parent);
+               if (z.parent.parent.left == z.parent) {
+                  z.parent.parent.right.color = true;
+               }
+               else z.parent.parent.left.color = true;
             }
          }
          else {
-            if (z.parent == z.parent.parent.right) {
-         System.out.println("nahhhhhh - 1");
-               RBNode<K,V> y = z.parent.parent.left;
-               if (y.color) { // is red
-                  System.out.println("asg");
-                  z.parent.color = false; // same regardless of side
-                  y.color = false;
-                  z = z.parent.parent;
-                  z.color = true;
-                  System.out.println("asggggggggggggg");
+            RBNode<K,V> y = z.parent.parent.left;
+            if (y.color) {
+               z.parent.color = false;
+               y.color = false;
+               z.parent.parent.color = true;
+               z = z.parent.parent;
+            }
+            else if (z == z.parent.left) {
+               z = z.parent;
+               rightRotate(z);
+               z.parent.color = false;
+               z.parent.parent.color = true;
+               leftRotate(z.parent.parent);
+            }
+            else {
+               z.parent.parent.color = true;
+               leftRotate(z.parent.parent);
+               if (z.parent.parent.right == z.parent) {
+                  z.parent.parent.left.color = true;
                }
-               else if (z == z.parent.left) {
-                  z = z.parent;
-                  rightRotate(z);
-                  z.parent.color = false;
-                  z.parent.parent.color = true;
-                  leftRotate(z.parent.parent);
-               }
-               else {
-                  z = z.parent;
-                  leftRotate(z.parent);
-                  z.right.parent = z;
-                  z.color = false;
-                  z.left.color = true;
-               }
+               else z.parent.parent.right.color = true;
             }
          }
       }
       head.color = false;
    }
 
-   public void add(K key, V value) {
+   public void insert(K key, V value) {
       RBNode<K,V> z = new RBNode<K,V>(key,value);
       RBNode<K,V> y = nil;
       RBNode<K,V> x = head;
@@ -176,7 +162,6 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
       int currDepth = 0;
       size++;
       while (x != nil) {
-         System.out.println("nah");
          currDepth++;
          y = x;
          if (z.key.equals(x.key)) {
@@ -200,8 +185,7 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
       else y.right = z;
       z.left = z.right = nil;
       z.color = true;
-      addFixup(z);
-      System.out.println("sdafsfdsfas");
+      insertFixup(z);
    }
 
    private void transplant(RBNode<K,V> u, RBNode<K,V> v) {
@@ -221,8 +205,13 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
       while (from.left != nil) from = from.left;
       return from;
    }
+   
+   private RBNode<K,V> maximum(RBNode<K,V> from) {
+      while (from.right != nil) from = from.right;
+      return from;
+   }
 
-   private void removeFixup(RBNode<K,V> x) {
+   private void deleteFixup(RBNode<K,V> x) {
       System.out.println("hi " + x.key);
       RBNode<K,V> w;
       while (x != head && !x.color) { // x is black
@@ -296,7 +285,7 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
       x.color = false;
    }
 
-   public V remove(K key) {
+   public V delete(K key) {
       System.out.println("<<< " + key + " >>>");
       RBNode<K,V> z = head;
       V ret = null;
@@ -344,7 +333,7 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
       }
       printInOrder();
       if (!yOGColor) // is black
-         removeFixup(x);
+         deleteFixup(x);
       return ret;
    }
 

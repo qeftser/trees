@@ -18,7 +18,7 @@ public interface BinaryTreeInterface<K,V> {
     * @param key - the key to store the value under
     * @param value - the value to store
     */
-   public void add(K key, V value);
+   public void insert(K key, V value);
    
    /**
     * @return The value associated with the given key, or null if the key is not found
@@ -31,7 +31,7 @@ public interface BinaryTreeInterface<K,V> {
     * @param key - the key to search for
     * @return the value of the node removed, or null if the given key was not present in the tree
     */
-   public V remove(K key);
+   public V delete(K key);
    
    /**
     * Print the contents of the binary search tree
