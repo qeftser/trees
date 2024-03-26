@@ -101,29 +101,23 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
    }
 
    private void insertFixup(RBNode<K,V> z) {
-      while (z.parent.color) { // is red - nil must be black for this to work
+      while (z.parent.color) {
          if (z.parent == z.parent.parent.left) {
             RBNode<K,V> y = z.parent.parent.right;
-            if (y.color) { // is red - now we have red with red child
-               z.parent.color = false; // we fix by swapping the child colors
-               y.color = false;        // of the grandfather to black and the
-               z.parent.parent.color = true; // grandfather to red. This implies we
-               z = z.parent.parent;     // already know the grandfather is black  
-            }
-            else if (z == z.parent.right) { // somehow we know that this violates condition 4
-               z = z.parent;
-               leftRotate(z); // rotation introduces another case 4 violation
+            if (y.color) {
                z.parent.color = false;
+               y.color = false;
                z.parent.parent.color = true;
-               rightRotate(z.parent.parent); // correct introduced violation
+               z = z.parent.parent;
             }
             else {
+               if (z == z.parent.right) {
+                  z = z.parent;
+                  leftRotate(z);
+               }
+               z.parent.color = false;
                z.parent.parent.color = true;
                rightRotate(z.parent.parent);
-               if (z.parent.parent.left == z.parent) {
-                  z.parent.parent.right.color = true;
-               }
-               else z.parent.parent.left.color = true;
             }
          }
          else {
@@ -134,20 +128,14 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
                z.parent.parent.color = true;
                z = z.parent.parent;
             }
-            else if (z == z.parent.left) {
-               z = z.parent;
-               rightRotate(z);
+            else {
+               if (z == z.parent.left) {
+                  z = z.parent;
+                  rightRotate(z);
+               }
                z.parent.color = false;
                z.parent.parent.color = true;
                leftRotate(z.parent.parent);
-            }
-            else {
-               z.parent.parent.color = true;
-               leftRotate(z.parent.parent);
-               if (z.parent.parent.right == z.parent) {
-                  z.parent.parent.left.color = true;
-               }
-               else z.parent.parent.right.color = true;
             }
          }
       }
@@ -158,7 +146,6 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
       RBNode<K,V> z = new RBNode<K,V>(key,value);
       RBNode<K,V> y = nil;
       RBNode<K,V> x = head;
-      z.parent = nil;
       int currDepth = 0;
       size++;
       while (x != nil) {
@@ -183,7 +170,8 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
          y.left = z;
       }
       else y.right = z;
-      z.left = z.right = nil;
+      z.left = nil;
+      z.right = nil;
       z.color = true;
       insertFixup(z);
    }
@@ -212,81 +200,64 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
    }
 
    private void deleteFixup(RBNode<K,V> x) {
-      System.out.println("hi " + x.key);
-      RBNode<K,V> w;
-      while (x != head && !x.color) { // x is black
+      while (x.key != head && !x.color) {
          if (x == x.parent.left) {
-            w = x.parent.right;
-            if (w.color) { // is red
+            RBNode<K,V> w = x.parent.right;
+            if (w.color) {
                w.color = false;
-               x.parent.color = true;
                leftRotate(x.parent);
-               w.right.parent = w;
                w = x.parent.right;
             }
-            if (!w.left.color && !w.right.color) { // both black
+            if (!w.left.color && !w.right.color) {
                w.color = true;
                x = x.parent;
             }
-            else if (!w.right.color) {
-               w.left.color = false;
-               w.color = true;
-               rightRotate(w);
-               w = x.parent.right;
+            else {
+               if (!w.right.color) {
+                  w.left.color = false;
+                  w.color = false;
+                  rightRotate(w);
+                  w = x.parent.right;
+               }
                w.color = x.parent.color;
                x.parent.color = false;
                w.right.color = false;
                leftRotate(x.parent);
                x = head;
-            }
-            else {
-               x = w.parent;
-               leftRotate(x);
-               w.right.parent = w;
-               w.left.color = w.right.color = false;
-               w.color = true;
-               x = x.parent.parent;
             }
          }
          else {
-            w = x.parent.left;
-            if (w.color) { // is red
+            RBNode<K,V> w = x.parent.left;
+            if (w.color) {
                w.color = false;
                x.parent.color = true;
                rightRotate(x.parent);
-               w.left.parent = w; 
                w = x.parent.left;
             }
-            if (!w.right.color && !w.left.color) { // both black
+            if (!w.right.color && !w.left.color) {
                w.color = true;
                x = x.parent;
             }
-            else if (!w.left.color) {
-               w.right.color = false;
-               w.color = true;
-               leftRotate(w);
-               w = x.parent.left;
+            else {
+               if (!w.left.color) {
+                  w.right.color = false;
+                  w.color = true;
+                  leftRotate(w);
+                  w = x.parent.left;
+               }
                w.color = x.parent.color;
                x.parent.color = false;
                w.left.color = false;
                rightRotate(x.parent);
                x = head;
-            }
-            else {
-               x = w.parent;
-               rightRotate(x);
-               w.left.parent = w;
-               w.left.color = w.right.color = false;
-               w.color = true;
-               x = x.parent.parent;
             }
          }
       }
       x.color = false;
    }
 
+
    public V delete(K key) {
-      System.out.println("<<< " + key + " >>>");
       RBNode<K,V> z = head;
       V ret = null;
       while (z != nil) {
@@ -308,30 +279,28 @@ public class RedBlackTree<K extends Comparable<K>, V> implements BinaryTreeInter
       if (z.left == nil) {
          x = z.right;
          transplant(z,z.right);
-         System.out.println(z.key + " " + z.parent.key);
       }
       else if (z.right == nil) {
          x = z.left;
          transplant(z,z.left);
       }
       else {
-         y = minimum(z.right);
+         y = maximum(z.left);
          yOGColor = y.color;
-         x = y.right;
+         x = y.left;
          if (y.parent == z) {
             x.parent = y;
          }
          else {
-            transplant(y,y.right);
-            y.right = z.right;
-            y.right.parent = y;
+            transplant(y,y.left);
+            y.left = z.left;
+            y.left.parent = y;
          }
          transplant(z,y);
-         y.left = z.left;
-         y.left.parent = y;
+         y.right = z.right;
+         y.right.parent = y;
          y.color = z.color;
       }
-      printInOrder();
       if (!yOGColor) // is black
          deleteFixup(x);
       return ret;

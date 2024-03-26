@@ -8,7 +8,6 @@ int main(void) {
 
    struct rb_tree t;
    init_rb(&t);
-   /*
 
    struct rb_node a = {.key = 97, .val = 0, .l = t.nil, .r = t.nil };
    struct rb_node b = {.key = 98, .val = 1, .l = t.nil, .r = t.nil };
@@ -174,11 +173,9 @@ int main(void) {
    printf("\n\n");
 
    RESET();
-   */
 
    printf("=== test delete ===\n");
    
-   /*
    in_order_print_rb(&t);
    insert_rb(11,1,&t);
    in_order_print_rb(&t);
@@ -238,9 +235,6 @@ int main(void) {
    printf("\n\n");
 
    RESET();
-   */
-
-   printf("\n\nThere is no coverage for this case in intro to algorithms\n\n");
 
    in_order_print_rb(&t);
    insert_rb(11,1,&t);
@@ -479,7 +473,32 @@ int main(void) {
    delete_rb(38,&t);
    in_order_print_rb(&t);
 
+   printf("\n\n");
 
+   RESET();
+
+   insert_rb(5,5,&t);
+   insert_rb(7,5,&t);
+   insert_rb(4,5,&t);
+   insert_rb(2,5,&t);
+   insert_rb(3,5,&t);
+   insert_rb(1,5,&t);
+   insert_rb(0,5,&t);
+   insert_rb(9,5,&t);
+   insert_rb(6,5,&t);
+   insert_rb(8,5,&t);
+
+   delete_rb(0,&t);
+   delete_rb(1,&t);
+   delete_rb(6,&t);
+   delete_rb(8,&t);
+   delete_rb(9,&t);
+   delete_rb(3,&t);
+   delete_rb(2,&t);
+   delete_rb(4,&t);
+   delete_rb(7,&t);
+   in_order_print_rb(&t);
+   delete_rb(5,&t);
 
    destroy_helper_rb(t.root);
    return 0;

@@ -59,19 +59,14 @@ void rb_insert_fixup(struct rb_node * z, struct rb_tree * t) {
             z->p->p->color = red;
             z = z->p->p;
          }
-         else if (z == z->p->r) {
-            z = z->p;
-            left_rotate(z,t);
+         else {
+            if (z == z->p->r) {
+               z = z->p;
+               left_rotate(z,t);
+            }
             z->p->color = black;
             z->p->p->color = red;
             rght_rotate(z->p->p,t);
-         }
-         else {
-            z->p->p->color = red;
-            rght_rotate(z->p->p,t);
-            if (z->p->p->l == z->p)
-               z->p->p->r->color = red;
-            else z->p->p->l->color = red;
          }
       }
       else {
@@ -82,19 +77,14 @@ void rb_insert_fixup(struct rb_node * z, struct rb_tree * t) {
             z->p->p->color = red;
             z = z->p->p;
          }
-         else if (z == z->p->l) {
-            z = z->p;
-            rght_rotate(z,t);
+         else {
+            if (z == z->p->l) {
+               z = z->p;
+               rght_rotate(z,t);
+            }
             z->p->color = black;
             z->p->p->color = red;
             left_rotate(z->p->p,t);
-         }
-         else {
-            z->p->p->color = red;
-            left_rotate(z->p->p,t);
-            if (z->p->p->r == z->p)
-               z->p->p->l->color = red;
-            else z->p->p->r->color = red;
          }
       }
    }
@@ -167,24 +157,18 @@ void delete_fixup_rb(struct rb_node * x, struct rb_tree * t) {
             w->color = red;
             x = x->p;
          }
-         else if (w->r->color == black) {
-            w->l->color = black;
-            w->color = red;
-            rght_rotate(w,t);
-            w = x->p->r;
+         else {
+            if (w->r->color == black) {
+               w->l->color = black;
+               w->color = red;
+               rght_rotate(w,t);
+               w = x->p->r;
+            }
             w->color = x->p->color;
             x->p->color = black;
             w->r->color = black;
             left_rotate(x->p,t);
             x = t->root;
-         }
-         else if (w->color == black) {
-            w->color = w->p->color;
-            left_rotate(w->p,t);
-            w->r->color = black;
-            w->l->color = black;
-            if (w->p->p->color == black && w->p->p != &nil) { x = w->p->p; printf("hi2\n"); } // currently incorrect
-            else x = w->p;
          }
       }
       else {
@@ -199,24 +183,18 @@ void delete_fixup_rb(struct rb_node * x, struct rb_tree * t) {
             w->color = red;
             x = x->p;
          }
-         else if (w->l->color == black) {
-            w->r->color = black;
-            w->color =red;
-            left_rotate(w,t);
-            w = x->p->l;
+         else {
+            if (w->l->color == black) {
+               w->r->color = black;
+               w->color = red;
+               left_rotate(w,t);
+               w = x->p->l;
+            }
             w->color = x->p->color;
             x->p->color = black;
             w->l->color = black;
             rght_rotate(x->p,t);
             x = t->root;
-         }
-         else if (w->color == black) {
-            w->color = w->p->color;
-            rght_rotate(w->p,t);
-            w->l->color = black;
-            w->r->color = black;
-            if (w->p->p->color == black && w->p->p != &nil) { x = w->p->p; printf("hi1\n"); } // currently incorrect
-            else x = w->p;
          }
       }
    }

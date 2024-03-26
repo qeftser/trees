@@ -155,16 +155,13 @@ class TestTrees {
       bst.insert(6,6);
       bst.insert(8,8);
 
-      bst.printInOrder();
       assertEquals(11,bst.getSize());
       assertEquals(4,bst.delete(4));
-      bst.printInOrder();
       assertEquals(10,bst.getSize());
       assertEquals(null,bst.get(4));
       assertEquals(3,bst.get(3));
       assertEquals(2,bst.get(2));
       assertEquals(3,bst.delete(3));
-      bst.printInOrder();
       assertEquals(9,bst.getSize());
       assertEquals(null,bst.get(3));
       assertEquals(2,bst.get(2));
@@ -173,9 +170,7 @@ class TestTrees {
       assertEquals(20,bst.delete(20));
       assertEquals(8,bst.getSize());
       assertEquals(null,bst.get(20));
-      bst.printInOrder();
       assertEquals(5,bst.delete(5)); 
-      bst.printInOrder();
       assertEquals(7,bst.getSize());
       assertEquals(null,bst.get(5));
       assertEquals(2,bst.get(2));
@@ -183,38 +178,31 @@ class TestTrees {
       assertEquals(9,bst.delete(9));
       assertEquals(6,bst.getSize());
       assertEquals(null,bst.get(9));
-      bst.printInOrder();
       assertEquals(8,bst.get(8));
       assertEquals(6,bst.get(6));
       assertEquals(7,bst.delete(7));
       assertEquals(5,bst.getSize());
       assertEquals(null,bst.get(7));
-      bst.printInOrder();
       assertEquals(8,bst.get(8));
       assertEquals(6,bst.get(6));
       assertEquals(6,bst.delete(6));
-      bst.printInOrder();
       assertEquals(4,bst.getSize());
       assertEquals(null,bst.get(6));
       assertEquals(8,bst.get(8));
       assertEquals(8,bst.delete(8));
       assertEquals(3,bst.getSize());
       assertEquals(null,bst.get(8));
-      bst.printInOrder();
       assertEquals(2,bst.delete(2));
-      bst.printInOrder();
       assertEquals(2,bst.getSize());
       assertEquals(null,bst.get(2));
       assertEquals(1,bst.get(1));
       assertEquals(0,bst.get(0));
       assertEquals(0,bst.delete(0));
-      bst.printInOrder();
       assertEquals(1,bst.getSize());
       assertEquals(null,bst.get(0));
       assertEquals(1,bst.get(1));
       assertEquals(1,bst.delete(1));
       assertEquals(0,bst.getSize());
-      bst.printInOrder();
       assertEquals(null,bst.get(1));
       assertEquals(null,bst.delete(1));
    }
@@ -222,17 +210,13 @@ class TestTrees {
    @Test
    public void stressTestBST() {
       for (int i = 0; i < 100; i++) {
-         System.out.println(i);
          bst.insert(Math.abs(r.nextInt()%1000),i);
       }
-      bst.printInOrder();
       for (int i = 0; i < 1000; i++) {
-         System.out.println(i);
          if (null != bst.delete(i)) {
             assertEquals(null,bst.get(i));
          }
       }
-      bst.printInOrder();
       assertEquals(0,bst.getSize());
    }
 }
