@@ -8,6 +8,7 @@ int main(void) {
 
    struct rb_tree t;
    init_rb(&t);
+   /*
 
    struct rb_node a = {.key = 97, .val = 0, .l = t.nil, .r = t.nil };
    struct rb_node b = {.key = 98, .val = 1, .l = t.nil, .r = t.nil };
@@ -36,7 +37,7 @@ int main(void) {
 
    printf("nice nice\n\n");
 
-   RESET();
+   init_rb(&t);
 
    printf("=== test insert ===\n");
    in_order_print_rb(&t);
@@ -173,9 +174,313 @@ int main(void) {
    printf("\n\n");
 
    RESET();
+   */
+
+   printf("=== test delete ===\n");
+   
+   /*
+   in_order_print_rb(&t);
+   insert_rb(11,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(5,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(15,1,&t);
+   in_order_print_rb(&t);
+
+   delete_rb(5,&t);
+   in_order_print_rb(&t);
+   delete_rb(15,&t);
+   in_order_print_rb(&t);
+   delete_rb(11,&t);
+   in_order_print_rb(&t);
+
+   printf("\n\n");
+
+   RESET();
+
+   in_order_print_rb(&t);
+   insert_rb(11,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(2,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(20,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(1,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(21,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(15,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(14,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(16,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(17,1,&t);
+   in_order_print_rb(&t);
+
+   delete_rb(11,&t);
+   in_order_print_rb(&t);
+   delete_rb(2,&t);
+   in_order_print_rb(&t);
+   delete_rb(20,&t);
+   in_order_print_rb(&t);
+   delete_rb(1,&t);
+   in_order_print_rb(&t);
+   delete_rb(17,&t);
+   in_order_print_rb(&t);
+   delete_rb(16,&t);
+   in_order_print_rb(&t);
+   delete_rb(14,&t);
+   in_order_print_rb(&t);
+   delete_rb(15,&t);
+   in_order_print_rb(&t);
+
+   printf("\n\n");
+
+   RESET();
+   */
+
+   printf("\n\nThere is no coverage for this case in intro to algorithms\n\n");
+
+   in_order_print_rb(&t);
+   insert_rb(11,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(2,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(20,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(1,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(21,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(15,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(14,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(16,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(17,1,&t);
+   in_order_print_rb(&t);
+
+   delete_rb(15,&t);
+   in_order_print_rb(&t);
+   RESET();
+   
+   printf("\n\n");
+
+   in_order_print_rb(&t);
+   insert_rb(11,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(2,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(20,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(1,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(21,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(15,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(14,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(16,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(17,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(18,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(19,1,&t);
+   in_order_print_rb(&t);
+
+   delete_rb(15,&t);
+   in_order_print_rb(&t);
+   delete_rb(14,&t);
+   in_order_print_rb(&t);
+   delete_rb(17,&t);
+   in_order_print_rb(&t);
+   delete_rb(16,&t);
+   in_order_print_rb(&t);
+   delete_rb(11,&t);
+   in_order_print_rb(&t);
+   delete_rb(2,&t);
+   in_order_print_rb(&t);
+   delete_rb(20,&t);
+   in_order_print_rb(&t);
+   delete_rb(19,&t);
+   in_order_print_rb(&t);
+   delete_rb(18,&t);
+   in_order_print_rb(&t);
+
+   RESET();
+   
+   printf("\n\n");
+
+   in_order_print_rb(&t);
+   insert_rb(20,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(10,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(25,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(27,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(2,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(19,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(22,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(1,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(3,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(18,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(17,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(16,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(15,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(14,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(13,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(12,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(11,1,&t);
+   in_order_print_rb(&t);
+
+   delete_rb(18,&t);
+   in_order_print_rb(&t);
+   delete_rb(17,&t);
+   in_order_print_rb(&t);
+   delete_rb(15,&t);
+   in_order_print_rb(&t);
+   delete_rb(19,&t);
+   in_order_print_rb(&t);
+   delete_rb(27,&t);
+   in_order_print_rb(&t);
+   delete_rb(11,&t);
+   in_order_print_rb(&t);
+   delete_rb(20,&t);
+   in_order_print_rb(&t);
+   delete_rb(12,&t);
+   in_order_print_rb(&t);
+   delete_rb(22,&t);
+   in_order_print_rb(&t);
+   delete_rb(14,&t);
+   in_order_print_rb(&t);
+   delete_rb(13,&t);
+   in_order_print_rb(&t);
+   delete_rb(10,&t);
+   in_order_print_rb(&t);
+
+   RESET();
+   
+   printf("\n\n");
+
+   in_order_print_rb(&t);
+   insert_rb(20,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(19,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(21,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(18,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(22,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(17,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(23,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(16,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(24,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(15,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(25,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(14,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(26,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(13,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(27,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(12,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(28,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(11,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(29,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(11,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(30,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(10,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(31,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(9,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(32,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(8,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(33,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(7,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(34,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(6,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(35,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(5,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(36,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(4,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(37,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(3,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(38,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(2,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(39,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(1,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(40,1,&t);
+   in_order_print_rb(&t);
+   insert_rb(0,1,&t);
+   in_order_print_rb(&t);
+
+   delete_rb(33,&t);
+   in_order_print_rb(&t);
+   delete_rb(34,&t);
+   in_order_print_rb(&t);
+   delete_rb(25,&t);
+   in_order_print_rb(&t);
+   delete_rb(35,&t);
+   in_order_print_rb(&t);
+   delete_rb(36,&t);
+   in_order_print_rb(&t);
+   delete_rb(38,&t);
+   in_order_print_rb(&t);
 
 
 
-   destroy_rb(&t);
+   destroy_helper_rb(t.root);
    return 0;
 }
