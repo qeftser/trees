@@ -238,11 +238,6 @@ int main(void) {
    printf("\n\n");
 
    RESET();
-<<<<<<< HEAD:src/c/red_black_test.c
-=======
-
-   printf("\n\nThere is no coverage for this case in intro to algorithms\n\n");
->>>>>>> bc180e2 (binary search tree - plugged memory leak):src/c/tree_tests.c
 
    in_order_print_rb(&t);
    insert_rb(11,1,&t);
@@ -481,7 +476,6 @@ int main(void) {
    delete_rb(38,&t);
    in_order_print_rb(&t);
 
-<<<<<<< HEAD:src/c/red_black_test.c
    printf("\n\n");
 
    RESET();
@@ -509,8 +503,6 @@ int main(void) {
    in_order_print_rb(&t);
    delete_rb(5,&t);
 
-=======
->>>>>>> bc180e2 (binary search tree - plugged memory leak):src/c/tree_tests.c
    destroy_helper_rb(t.root);
 
    printf("\n======= TEST BINARY SEARCH TREE =======\n\n");
