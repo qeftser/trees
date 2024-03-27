@@ -1,10 +1,13 @@
 
 #include "red_black_tree.h"
+#include "binary_search_tree.h"
 #include <stdio.h>
 
 #define RESET() destroy_helper_rb(t.root); init_rb(&t)
 
 int main(void) {
+
+   printf("\n======= RED BLACK TREE TESTS =======\n");
 
    struct rb_tree t;
    init_rb(&t);
@@ -235,6 +238,11 @@ int main(void) {
    printf("\n\n");
 
    RESET();
+<<<<<<< HEAD:src/c/red_black_test.c
+=======
+
+   printf("\n\nThere is no coverage for this case in intro to algorithms\n\n");
+>>>>>>> bc180e2 (binary search tree - plugged memory leak):src/c/tree_tests.c
 
    in_order_print_rb(&t);
    insert_rb(11,1,&t);
@@ -473,6 +481,7 @@ int main(void) {
    delete_rb(38,&t);
    in_order_print_rb(&t);
 
+<<<<<<< HEAD:src/c/red_black_test.c
    printf("\n\n");
 
    RESET();
@@ -500,6 +509,92 @@ int main(void) {
    in_order_print_rb(&t);
    delete_rb(5,&t);
 
+=======
+>>>>>>> bc180e2 (binary search tree - plugged memory leak):src/c/tree_tests.c
    destroy_helper_rb(t.root);
+
+   printf("\n======= TEST BINARY SEARCH TREE =======\n\n");
+
+   struct bs_tree s;
+   init_bs(&s);
+
+   printf("=== test insert ===\n");
+
+   in_order_print_bs(&s);
+   insert_bs(5,5,&s);
+   in_order_print_bs(&s);
+   insert_bs(2,4,&s);
+   in_order_print_bs(&s);
+   insert_bs(4,3,&s);
+   in_order_print_bs(&s);
+   insert_bs(3,2,&s);
+   in_order_print_bs(&s);
+   insert_bs(1,1,&s);
+   in_order_print_bs(&s);
+   insert_bs(7,6,&s);
+   in_order_print_bs(&s);
+   insert_bs(6,7,&s);
+   in_order_print_bs(&s);
+   insert_bs(8,8,&s);
+   in_order_print_bs(&s);
+   insert_bs(9,9,&s);
+   in_order_print_bs(&s);
+   
+   printf("\n\n");
+
+   printf("=== test delete ===\n");
+
+   delete_bs(5,&s);
+   in_order_print_bs(&s);
+   delete_bs(1,&s);
+   in_order_print_bs(&s);
+   delete_bs(9,&s);
+   in_order_print_bs(&s);
+   delete_bs(7,&s);
+   in_order_print_bs(&s);
+   delete_bs(6,&s);
+   in_order_print_bs(&s);
+   delete_bs(2,&s);
+   in_order_print_bs(&s);
+   delete_bs(4,&s);
+   in_order_print_bs(&s);
+   delete_bs(3,&s);
+   in_order_print_bs(&s);
+   delete_bs(8,&s);
+   in_order_print_bs(&s);
+
+   printf("\n\n");
+
+   insert_bs(10,1,&s);
+   insert_bs(5,1,&s);
+   insert_bs(3,1,&s);
+   insert_bs(4,1,&s);
+   insert_bs(1,1,&s);
+   insert_bs(2,1,&s);
+   insert_bs(0,1,&s);
+   insert_bs(7,1,&s);
+   insert_bs(9,1,&s);
+   insert_bs(8,1,&s);
+   insert_bs(6,1,&s);
+   insert_bs(15,1,&s);
+   insert_bs(13,1,&s);
+   insert_bs(12,1,&s);
+   insert_bs(11,1,&s);
+   insert_bs(18,1,&s);
+   insert_bs(20,1,&s);
+   insert_bs(19,1,&s);
+   insert_bs(17,1,&s);
+   insert_bs(16,1,&s);
+   in_order_print_bs(&s);
+
+   for (int i = 20; i; i--) {
+      delete_bs(i,&s);
+      in_order_print_bs(&s);
+   }
+
+   printf("\n\n");
+
+   destroy_helper_bs(s.root);
+
    return 0;
 }

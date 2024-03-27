@@ -203,6 +203,7 @@ void delete_fixup_rb(struct rb_node * x, struct rb_tree * t) {
 
 int delete_rb(int key, struct rb_tree * t) {
    struct rb_node * z = t->root;
+   int ret_val = -1;
    while (z != &nil) {
       if (key == z->key) break;
       else if (key < z->key) z = z->l;
@@ -239,7 +240,9 @@ int delete_rb(int key, struct rb_tree * t) {
    if (y_og_color == black) {
       delete_fixup_rb(x,t);
    }
-   return z->val;
+   ret_val = z->val;
+   free(z);
+   return ret_val;
 }
 
 void in_order_print_helper_rb(struct rb_node * n) {
