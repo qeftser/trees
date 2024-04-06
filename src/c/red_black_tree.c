@@ -245,6 +245,16 @@ int delete_rb(int key, struct rb_tree * t) {
    return ret_val;
 }
 
+int get_rb(int key, struct rb_tree * t) {
+   struct rb_node * z = t->root;
+   while (z != &nil) {
+      if (key == z->key) return z->val;
+      else if (key < z->key) z = z->l;
+      else z = z->r;
+   }
+   return -1; // we assume no negative keys
+}
+
 void in_order_print_helper_rb(struct rb_node * n) {
    if (n == &nil) return;
    printf("l");
