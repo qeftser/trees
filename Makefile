@@ -6,7 +6,7 @@ JJ := javac
 # other variables
 OUTPUT := tst.e
 CC_FLAGS := -g -O3 -Wall -Wextra -Wpedantic -mavx2 -mfma -mcx16
-LD_FLAGS := -O3
+LD_FLAGS := -O3 
 
 
 C_FILES := $(wildcard src/c/*.c) 
@@ -27,7 +27,7 @@ clean:
 	rm -f $(OBJ_FILES) ./bin/*.class ./bin/*.e
 
 c: $(OBJ_FILES) Makefile 
-	$(CC) $(OBJ_FILES) $(H_FILES) $(LD_FLAGS) -o ./bin/c_tst.e
+	$(CC) $(OBJ_FILES) $(H_FILES) $(LD_FLAGS) -o ./bin/c_tst.e 
 
 java: $(J_FILES) Makefile
 	$(JJ) $(J_FILES) -cp .:$(JUNIT) -Xdiags:verbose -Xlint:all -d ./bin/
