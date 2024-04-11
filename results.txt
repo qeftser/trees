@@ -1,0 +1,114 @@
+======= TIMING 100 TREE INSERTIONS =======
+
+=== RANDOM INPUT ===
+Results:
+Binary Search Tree (Inserts)   : 0.000008
+Red Black Tree     (Inserts)   : 0.000009
+Binary Search Tree (Queries)   : 0.000002
+Red Black Tree     (Queries)   : 0.000002
+Binary Search Tree (Deletes)   : 0.000001
+Red Black Tree     (Deletes)   : 0.000007
+
+=== ORDERED INPUT ===
+Results:
+Binary Search Tree (Inserts)   : 0.000009
+Red Black Tree     (Inserts)   : 0.000005
+Binary Search Tree (Queries)   : 0.000011
+Red Black Tree     (Queries)   : 0.000002
+Binary Search Tree (Deletes)   : 0.000002
+Red Black Tree     (Deletes)   : 0.000004
+
+======= TIMING 1000 TREE INSERTIONS =======
+
+=== RANDOM INPUT ===
+Results:
+Binary Search Tree (Inserts)   : 0.000081
+Red Black Tree     (Inserts)   : 0.000100
+Binary Search Tree (Queries)   : 0.000030
+Red Black Tree     (Queries)   : 0.000020
+Binary Search Tree (Deletes)   : 0.000039
+Red Black Tree     (Deletes)   : 0.000053
+
+=== ORDERED INPUT ===
+Results:
+Binary Search Tree (Inserts)   : 0.000879
+Red Black Tree     (Inserts)   : 0.000038
+Binary Search Tree (Queries)   : 0.001093
+Red Black Tree     (Queries)   : 0.000012
+Binary Search Tree (Deletes)   : 0.000010
+Red Black Tree     (Deletes)   : 0.000031
+
+======= TIMING 10000 TREE INSERTIONS =======
+
+=== RANDOM INPUT ===
+Results:
+Binary Search Tree (Inserts)   : 0.001099
+Red Black Tree     (Inserts)   : 0.001315
+Binary Search Tree (Queries)   : 0.000531
+Red Black Tree     (Queries)   : 0.000343
+Binary Search Tree (Deletes)   : 0.000530
+Red Black Tree     (Deletes)   : 0.000732
+
+=== ORDERED INPUT ===
+Results:
+Binary Search Tree (Inserts)   : 0.102452
+Red Black Tree     (Inserts)   : 0.000578
+Binary Search Tree (Queries)   : 0.122693
+Red Black Tree     (Queries)   : 0.000178
+Binary Search Tree (Deletes)   : 0.000080
+Red Black Tree     (Deletes)   : 0.000310
+
+======= TIMING 100000 TREE INSERTIONS =======
+
+=== RANDOM INPUT ===
+Results:
+Binary Search Tree (Inserts)   : 0.016940
+Red Black Tree     (Inserts)   : 0.024467
+Binary Search Tree (Queries)   : 0.010664
+Red Black Tree     (Queries)   : 0.012966
+Binary Search Tree (Deletes)   : 0.011288
+Red Black Tree     (Deletes)   : 0.023471
+
+=== ORDERED INPUT ===
+Results:
+Binary Search Tree (Inserts)   : 18.593717
+Red Black Tree     (Inserts)   : 0.008664
+Binary Search Tree (Queries)   : 22.085517
+Red Black Tree     (Queries)   : 0.002705
+Binary Search Tree (Deletes)   : 0.001576
+Red Black Tree     (Deletes)   : 0.005659
+
+======= TIMING 1000000 TREE INSERTIONS =======
+
+=== RANDOM INPUT ===
+Results:
+Binary Search Tree (Inserts)   : 0.634487
+Red Black Tree     (Inserts)   : 0.612645
+Binary Search Tree (Queries)   : 0.547553
+Red Black Tree     (Queries)   : 0.284287
+Binary Search Tree (Deletes)   : 0.456210
+Red Black Tree     (Deletes)   : 0.592818
+
+=== ORDERED INPUT ===
+Results:
+Binary Search Tree (Inserts)   : 5651.387693
+Red Black Tree     (Inserts)   : 0.152559
+Binary Search Tree (Queries)   : 6096.013741
+Red Black Tree     (Queries)   : 0.049906
+Binary Search Tree (Deletes)   : 0.015232
+Red Black Tree     (Deletes)   : 0.074156
+
+======= TIMING 10000000 TREE INSERTIONS =======
+
+=== RANDOM INPUT ===
+Results:
+Binary Search Tree (Inserts)   : 13.585725
+Red Black Tree     (Inserts)   : 11.185194
+Binary Search Tree (Queries)   : 12.673620
+Red Black Tree     (Queries)   : 5.552290
+Binary Search Tree (Deletes)   : 10.065279
+Red Black Tree     (Deletes)   : 11.307351
+
+=== ORDERED INPUT ===
+Results:
+      
