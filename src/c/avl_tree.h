@@ -13,10 +13,10 @@ int delete_avl(int, struct avl_tree *);
 void destroy_avl(struct avl_tree *);
 void destroy_helper_avl(struct avl_node *);
 
-void ll_rotate(struct avl_node *, struct avl_tree *);
-void rr_rotate(struct avl_node *, struct avl_tree *);
-void rl_rotate(struct avl_node *, struct avl_tree *);
-void lr_rotate(struct avl_node *, struct avl_tree *);
+struct avl_node * ll_rotate(struct avl_node *, struct avl_node *);
+struct avl_node * rr_rotate(struct avl_node *, struct avl_node *);
+struct avl_node * rl_rotate(struct avl_node *, struct avl_node *);
+struct avl_node * lr_rotate(struct avl_node *, struct avl_node *);
 
 void in_order_print_avl(struct avl_tree *);
 

@@ -7,10 +7,11 @@
 #include <stdlib.h>
 
 #define RESET() destroy_helper_rb(t.root); init_rb(&t)
+#define RESETAVL() destroy_helper_avl(v.root); init_avl(&v)
 
 
 #define TEST(name,condition) \
-   printf("TEST %02x: [ %-30s ] ",tests++,name); \
+   printf("TEST %03x: [ %-30s ] ",tests++,name); \
    res = condition; \
    if (res) printf("\033[32mPASSED\033[0m\n"); \
    else printf("\033[31mFAILED\033[0m\n")
@@ -744,67 +745,410 @@ int main(int argc, char ** argv) {
 
    destroy_helper_bs(s.root);
 
-   /*
    printf("\n======= TEST AVL SEARCH TREE =======\n\n");
 
    struct avl_tree v;
 
-   struct avl_node aa = {.key = 97, .val = 0, .l = 0, .r = 0 };
-   struct avl_node bb = {.key = 98, .val = 1, .l = 0, .r = 0 };
-   struct avl_node cc = {.key = 99, .val = 2, .l = 0, .r = 0 };
-   struct avl_node dd = {.key = 100, .val = 3, .l = 0, .r = 0 };
-   struct avl_node yy = {.key = 121, .val = 5, .l = &bb, .r = &cc };
-   struct avl_node xx = {.key = 120, .val = 6, .p = 0, .l = &aa, .r = &yy };
-   struct avl_node zz = {.key = 122, .val = 7, .p = 0, .l = 0, .r = 0 };
-   yy.p = &xx; aa.p = &xx; bb.p = &yy; cc.p = &yy;
-
-   ll_rotate(&xx,&v);
-
-   TEST("ll rotate",(xx.l->key == 'a' && xx.r->key == 'b' && yy.l->key == 'x' && yy.r->key == 'c' &&
-                       aa.p->key == 'x' && bb.p->key == 'x' && cc.p->key == 'y'));
-
-   rr_rotate(&yy,&v);
-
-   TEST("rr rotate",(xx.l->key == 'a' && xx.r->key == 'y' && yy.l->key == 'b' && yy.r->key == 'c' &&
-                     aa.p->key == 'x' && bb.p->key == 'y' && cc.p->key == 'y'));
-
-   xx.l = &aa; aa.p = &xx; zz.p = &xx; xx.r = &zz; yy.p = &zz; 
-   zz.l = &yy; dd.p = &zz; zz.r = &dd; yy.l = &bb; yy.r = &cc;
-   cc.p = &yy; bb.p = &yy;
-
-   rl_rotate(&zz,&v);
-
-   TEST("rl rotate",(xx.l->key == 'a' && xx.r->key == 'b' && xx.p->key == 'y' && 
-                     zz.l->key == 'c' && zz.r->key == 'd' && zz.p->key == 'y' &&
-                     yy.l->key == 'x' && yy.r->key == 'z' && yy.p == 0));
-
-   xx.r = &dd; dd.p = &xx; zz.p = &xx; xx.l = &zz; yy.p = &zz;
-   zz.r = &yy; aa.p = &zz; zz.l = &aa; yy.l = &bb; yy.r = &cc;
-   cc.p = &yy; bb.p = &yy; xx.p = 0;
-
-   lr_rotate(&zz,&v);
-
-   TEST("lr rotate",(xx.p->key == 'y' && zz.p->key == 'y' && yy.p == 0 &&
-                     xx.l->key == 'c' && zz.l->key == 'a' && yy.l->key == 'z' &&
-                     xx.r->key == 'd' && zz.r->key == 'b' && yy.r->key == 'x'));
-
    v.root = 0;
 
-   in_order_print_avl(&v);
-   insert_avl(5,3,&v);
-   in_order_print_avl(&v);
-   insert_avl(3,1,&v);
-   in_order_print_avl(&v);
+   /* same insert tests from red black tree */
+
+   insert_avl(11,1,&v);
+   TEST("insert 11",get_avl(11,&v));
+   insert_avl(14,1,&v);
+   TEST("insert 14",get_avl(14,&v));
+   insert_avl(2,1,&v);
+   TEST("insert 2",get_avl(2,&v));
+   insert_avl(15,1,&v);
+   TEST("insert 15",get_avl(15,&v));
+   insert_avl(1,1,&v);
+   TEST("insert 1",get_avl(1,&v));
    insert_avl(7,1,&v);
-   in_order_print_avl(&v);
+   TEST("insert 7",get_avl(7,&v));
    insert_avl(8,1,&v);
-   in_order_print_avl(&v);
+   TEST("insert 8",get_avl(8,&v));
+   insert_avl(5,1,&v);
+   TEST("insert 5",get_avl(5,&v));
+   insert_avl(4,1,&v);
+   TEST("insert 4",get_avl(4,&v));
+
+   RESETAVL();
+
+   insert_avl(11,1,&v);
+   TEST("insert 11",get_avl(11,&v));
+   insert_avl(2,1,&v);
+   TEST("insert 2",get_avl(2,&v));
+   insert_avl(20,1,&v);
+   TEST("insert 20",get_avl(20,&v));
+   insert_avl(1,1,&v);
+   TEST("insert 1",get_avl(1,&v));
+   insert_avl(21,1,&v);
+   TEST("insert 21",get_avl(21,&v));
+   insert_avl(15,1,&v);
+   TEST("insert 15",get_avl(15,&v));
+   insert_avl(14,1,&v);
+   TEST("insert 14",get_avl(14,&v));
+   insert_avl(16,1,&v);
+   TEST("insert 16",get_avl(16,&v));
+   insert_avl(17,1,&v);
+   TEST("insert 17",get_avl(17,&v));
+
+   RESETAVL();
+
+   insert_avl(11,1,&v);
+   TEST("insert 11",get_avl(11,&v));
+   insert_avl(5,1,&v);
+   TEST("insert 5",get_avl(5,&v));
+   insert_avl(15,1,&v);
+   TEST("insert 15",get_avl(15,&v));
+   insert_avl(17,1,&v);
+   TEST("insert 17",get_avl(17,&v));
+   insert_avl(19,1,&v);
+   TEST("insert 19",get_avl(19,&v));
+   
+   RESETAVL();
+
+   insert_avl(11,1,&v);
+   TEST("insert 11",get_avl(11,&v));
+   insert_avl(5,1,&v);
+   TEST("insert 5",get_avl(5,&v));
+   insert_avl(15,1,&v);
+   TEST("insert 15",get_avl(15,&v));
+   insert_avl(4,1,&v);
+   TEST("insert 4",get_avl(4,&v));
+   insert_avl(3,1,&v);
+   TEST("insert 19",get_avl(3,&v));
+   insert_avl(17,1,&v);
+   TEST("insert 17",get_avl(17,&v));
+   insert_avl(19,1,&v);
+   TEST("insert 19",get_avl(19,&v));
+   insert_avl(6,1,&v);
+   TEST("insert 6",get_avl(6,&v));
+   insert_avl(7,1,&v);
+   TEST("insert 7",get_avl(7,&v));
+   insert_avl(8,1,&v);
+   TEST("insert 8",get_avl(8,&v));
    insert_avl(9,1,&v);
-   in_order_print_avl(&v);
+   TEST("insert 9",get_avl(9,&v));
    insert_avl(10,1,&v);
+   TEST("insert 10",get_avl(10,&v));
+   
+
+   RESETAVL();
+
+   insert_avl(20,1,&v);
+   TEST("insert 20",get_avl(20,&v));
+   insert_avl(10,1,&v);
+   TEST("insert 10",get_avl(10,&v));
+   insert_avl(25,1,&v);
+   TEST("insert 25",get_avl(25,&v));
+   insert_avl(27,1,&v);
+   TEST("insert 27",get_avl(27,&v));
+   insert_avl(2,1,&v);
+   TEST("insert 2",get_avl(2,&v));
+   insert_avl(19,1,&v);
+   TEST("insert 19",get_avl(19,&v));
+   insert_avl(22,1,&v);
+   TEST("insert 22",get_avl(22,&v));
+   insert_avl(1,1,&v);
+   TEST("insert 1",get_avl(1,&v));
+   insert_avl(3,1,&v);
+   TEST("insert 3",get_avl(3,&v));
+   insert_avl(18,1,&v);
+   TEST("insert 18",get_avl(18,&v));
+   insert_avl(17,1,&v);
+   TEST("insert 17",get_avl(17,&v));
+   insert_avl(16,1,&v);
+   TEST("insert 16",get_avl(16,&v));
+   insert_avl(15,1,&v);
+   TEST("insert 15",get_avl(15,&v));
+   insert_avl(14,1,&v);
+   TEST("insert 14",get_avl(14,&v));
+   insert_avl(13,1,&v);
+   TEST("insert 13",get_avl(13,&v));
+   insert_avl(12,1,&v);
+   TEST("insert 12",get_avl(12,&v));
+   insert_avl(11,1,&v);
+   TEST("insert 11",get_avl(11,&v));
+
+   RESETAVL();
+
+   /* test double rotation case */
+
+   insert_avl(15,1,&v);
+   TEST("insert 15",get_avl(11,&v));
+   insert_avl(7,1,&v);
+   TEST("insert 7",get_avl(7,&v));
+   insert_avl(20,1,&v);
+   TEST("insert 20",get_avl(20,&v));
+   insert_avl(9,1,&v);
+   TEST("insert 9",get_avl(9,&v));
+   insert_avl(8,1,&v);
+   TEST("insert 8",get_avl(8,&v));
+   insert_avl(6,1,&v);
+   TEST("insert 6",get_avl(6,&v));
+   insert_avl(5,1,&v);
+   TEST("insert 5",get_avl(5,&v));
+   insert_avl(4,1,&v);
+   TEST("insert 4",get_avl(4,&v));
+
+   RESETAVL();
+
+   insert_avl(15,1,&v);
+   TEST("insert 15",get_avl(15,&v));
+   insert_avl(20,1,&v);
+   TEST("insert 20",get_avl(20,&v));
+   insert_avl(7,1,&v);
+   TEST("insert 7",get_avl(7,&v));
+   insert_avl(16,1,&v);
+   TEST("insert 16",get_avl(16,&v));
+   insert_avl(17,1,&v);
+   TEST("insert 17",get_avl(17,&v));
+   insert_avl(21,1,&v);
+   TEST("insert 21",get_avl(21,&v));
+   insert_avl(18,1,&v);
+   TEST("insert 18",get_avl(18,&v));
+   insert_avl(19,1,&v);
+   TEST("insert 19",get_avl(19,&v));
+
+   RESETAVL();
+
+   insert_avl(11,1,&v);
+   insert_avl(5,1,&v);
+   insert_avl(15,1,&v);
+
+   delete_avl(5,&v);
+   TEST("delete 5",get_avl(5,&v) == -1);
+   delete_avl(15,&v);
+   TEST("delete 15",get_avl(15,&v) == -1);
+   delete_avl(11,&v);
+   TEST("delete 11",get_avl(11,&v) == -1);
+
+   RESETAVL();
+
+   insert_avl(11,1,&v);
+   insert_avl(2,1,&v);
+   insert_avl(20,1,&v);
+   insert_avl(1,1,&v);
+   insert_avl(21,1,&v);
+   insert_avl(15,1,&v);
+   insert_avl(14,1,&v);
+   insert_avl(16,1,&v);
+   insert_avl(17,1,&v);
+
+   in_order_print_avl(&v);
+   delete_avl(11,&v);
+   in_order_print_avl(&v);
+   TEST("delete 11",get_avl(11,&v) == -1);
+   delete_avl(2,&v);
+   in_order_print_avl(&v);
+   TEST("delete 2",get_avl(2,&v) == -1);
+   delete_avl(20,&v);
+   in_order_print_avl(&v);
+   TEST("delete 20",get_avl(20,&v) == -1);
+   delete_avl(1,&v);
+   in_order_print_avl(&v);
+   TEST("delete 1",get_avl(1,&v) == -1);
+   delete_avl(17,&v);
+   in_order_print_avl(&v);
+   TEST("delete 17",get_avl(17,&v) == -1);
+   delete_avl(16,&v);
+   TEST("delete 16",get_avl(16,&v) == -1);
+   delete_avl(14,&v);
+   TEST("delete 14",get_avl(14,&v) == -1);
+   delete_avl(15,&v);
+   TEST("delete 15",get_avl(15,&v) == -1);
+
+   RESETAVL();
+
+   insert_avl(11,1,&v);
+   insert_avl(2,1,&v);
+   insert_avl(20,1,&v);
+   insert_avl(1,1,&v);
+   insert_avl(21,1,&v);
+   insert_avl(15,1,&v);
+   insert_avl(14,1,&v);
+   insert_avl(16,1,&v);
+   insert_avl(17,1,&v);
+
    in_order_print_avl(&v);
 
-   */
+   delete_avl(15,&v);
+   TEST("delete 15",get_avl(15,&v) == -1);
+   RESETAVL();
+
+   insert_avl(11,1,&v);
+   insert_avl(2,1,&v);
+   insert_avl(20,1,&v);
+   insert_avl(1,1,&v);
+   insert_avl(21,1,&v);
+   insert_avl(15,1,&v);
+   insert_avl(14,1,&v);
+   insert_avl(16,1,&v);
+   insert_avl(17,1,&v);
+   insert_avl(18,1,&v);
+   insert_avl(19,1,&v);
+
+   in_order_print_avl(&v);
+
+   delete_avl(15,&v);
+   TEST("delete 15",get_avl(15,&v) == -1);
+   delete_avl(14,&v);
+   TEST("delete 14",get_avl(14,&v) == -1);
+   delete_avl(17,&v);
+   TEST("delete 17",get_avl(17,&v) == -1);
+   delete_avl(16,&v);
+   TEST("delete 16",get_avl(16,&v) == -1);
+   delete_avl(11,&v);
+   TEST("delete 11",get_avl(11,&v) == -1);
+   delete_avl(2,&v);
+   TEST("delete 12",get_avl(2,&v) == -1);
+   delete_avl(20,&v);
+   TEST("delete 20",get_avl(20,&v) == -1);
+   delete_avl(19,&v);
+   TEST("delete 19",get_avl(19,&v) == -1);
+   delete_avl(18,&v);
+   TEST("delete 18",get_avl(18,&v) == -1);
+
+   RESETAVL();
+   
+   insert_avl(20,1,&v);
+   insert_avl(10,1,&v);
+   insert_avl(25,1,&v);
+   insert_avl(27,1,&v);
+   insert_avl(2,1,&v);
+   insert_avl(19,1,&v);
+   insert_avl(22,1,&v);
+   insert_avl(1,1,&v);
+   insert_avl(3,1,&v);
+   insert_avl(18,1,&v);
+   insert_avl(17,1,&v);
+   insert_avl(16,1,&v);
+   insert_avl(15,1,&v);
+   insert_avl(14,1,&v);
+   insert_avl(13,1,&v);
+   insert_avl(12,1,&v);
+   insert_avl(11,1,&v);
+
+   delete_avl(18,&v);
+   TEST("delete 18",get_avl(18,&v) == -1);
+   delete_avl(17,&v);
+   TEST("delete 17",get_avl(17,&v) == -1);
+   delete_avl(15,&v);
+   TEST("delete 15",get_avl(15,&v) == -1);
+   delete_avl(19,&v);
+   TEST("delete 19",get_avl(19,&v) == -1);
+   delete_avl(27,&v);
+   TEST("delete 27",get_avl(27,&v) == -1);
+   delete_avl(11,&v);
+   TEST("delete 11",get_avl(11,&v) == -1);
+   delete_avl(20,&v);
+   TEST("delete 20",get_avl(20,&v) == -1);
+   delete_avl(12,&v);
+   TEST("delete 12",get_avl(12,&v) == -1);
+   delete_avl(22,&v);
+   TEST("delete 22",get_avl(22,&v) == -1);
+   delete_avl(14,&v);
+   TEST("delete 14",get_avl(14,&v) == -1);
+   delete_avl(13,&v);
+   TEST("delete 13",get_avl(13,&v) == -1);
+   delete_avl(10,&v);
+   TEST("delete 10",get_avl(10,&v) == -1);
+
+   RESETAVL();
+   
+   insert_avl(20,1,&v);
+   insert_avl(19,1,&v);
+   insert_avl(21,1,&v);
+   insert_avl(18,1,&v);
+   insert_avl(22,1,&v);
+   insert_avl(17,1,&v);
+   insert_avl(23,1,&v);
+   insert_avl(16,1,&v);
+   insert_avl(24,1,&v);
+   insert_avl(15,1,&v);
+   insert_avl(25,1,&v);
+   insert_avl(14,1,&v);
+   insert_avl(26,1,&v);
+   insert_avl(13,1,&v);
+   insert_avl(27,1,&v);
+   insert_avl(12,1,&v);
+   insert_avl(28,1,&v);
+   insert_avl(11,1,&v);
+   insert_avl(29,1,&v);
+   insert_avl(11,1,&v);
+   insert_avl(30,1,&v);
+   insert_avl(10,1,&v);
+   insert_avl(31,1,&v);
+   insert_avl(9,1,&v);
+   insert_avl(32,1,&v);
+   insert_avl(8,1,&v);
+   insert_avl(33,1,&v);
+   insert_avl(7,1,&v);
+   insert_avl(34,1,&v);
+   insert_avl(6,1,&v);
+   insert_avl(35,1,&v);
+   insert_avl(5,1,&v);
+   insert_avl(36,1,&v);
+   insert_avl(4,1,&v);
+   insert_avl(37,1,&v);
+   insert_avl(3,1,&v);
+   insert_avl(38,1,&v);
+   insert_avl(2,1,&v);
+   insert_avl(39,1,&v);
+   insert_avl(1,1,&v);
+   insert_avl(40,1,&v);
+   insert_avl(0,1,&v);
+
+   delete_avl(33,&v);
+   TEST("delete 33",get_avl(33,&v) == -1);
+   delete_avl(34,&v);
+   TEST("delete 34",get_avl(34,&v) == -1);
+   delete_avl(25,&v);
+   TEST("delete 25",get_avl(25,&v) == -1);
+   delete_avl(35,&v);
+   TEST("delete 35",get_avl(35,&v) == -1);
+   delete_avl(36,&v);
+   TEST("delete 36",get_avl(36,&v) == -1);
+   delete_avl(38,&v);
+   TEST("delete 38",get_avl(38,&v) == -1);
+
+   RESETAVL();
+
+   insert_avl(5,5,&v);
+   insert_avl(7,5,&v);
+   insert_avl(4,5,&v);
+   insert_avl(2,5,&v);
+   insert_avl(3,5,&v);
+   insert_avl(1,5,&v);
+   insert_avl(0,5,&v);
+   insert_avl(9,5,&v);
+   insert_avl(6,5,&v);
+   insert_avl(8,5,&v);
+
+   delete_avl(0,&v);
+   TEST("delete 0",get_avl(0,&v) == -1);
+   delete_avl(1,&v);
+   TEST("delete 1",get_avl(1,&v) == -1);
+   delete_avl(6,&v);
+   TEST("delete 6",get_avl(6,&v) == -1);
+   delete_avl(8,&v);
+   TEST("delete 8",get_avl(8,&v) == -1);
+   delete_avl(9,&v);
+   TEST("delete 9",get_avl(9,&v) == -1);
+   delete_avl(3,&v);
+   TEST("delete 3",get_avl(3,&v) == -1);
+   delete_avl(2,&v);
+   TEST("delete 2",get_avl(2,&v) == -1);
+   delete_avl(4,&v);
+   TEST("delete 4",get_avl(4,&v) == -1);
+   delete_avl(7,&v);
+   TEST("delete 7",get_avl(7,&v) == -1);
+   delete_avl(5,&v);
+   TEST("delete 5",get_avl(5,&v) == -1);
+
+   destroy_helper_avl(v.root);
+
    }
    else if (mode == 2) 
    {
