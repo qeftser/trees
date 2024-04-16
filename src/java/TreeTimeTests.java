@@ -24,7 +24,7 @@ public class TreeTimeTests {
 
       reset();
 
-      while (cycles < 0x00ffffff) {
+      while (cycles < 0x0fffffff) {
          System.out.printf("\n======= TIMING %d TREE INSERTIONS =======\n",cycles);
 
          System.out.println("\n=== RANDOM INPUT ===");
