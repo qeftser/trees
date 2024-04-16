@@ -33,6 +33,6 @@ java: $(J_FILES) Makefile
 	$(JJ) $(J_FILES) -cp .:$(JUNIT) -Xdiags:verbose -Xlint:all -d ./bin/
 
 test_java: $(J_FILES) Makefile
-	java -jar $(JUNIT) --class-path ./bin/ --select-class TestTrees
+	java -jar $(JUNIT) --class-path ./bin/ --select-class TreeTests
 
 
