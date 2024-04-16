@@ -92,9 +92,6 @@ void rb_insert_fixup(struct rb_node * z, struct rb_tree * t) {
 }
 
 void insert_rb(int key, int val, struct rb_tree * t) {
-   struct rb_node * z = malloc(sizeof(struct rb_node));
-   if (!z) { printf("malloc fail\n"); perror(0); exit(1); };
-   z->key = key; z->val = val;
    struct rb_node * y = &nil;
    struct rb_node * x = t->root;
    while (x != &nil) {
@@ -103,11 +100,15 @@ void insert_rb(int key, int val, struct rb_tree * t) {
          return;
       }
       y = x;
-      if (z->key < x->key) {
+      if (key < x->key) {
          x = x->l;
       }
       else x = x->r;
    }
+
+   struct rb_node * z = malloc(sizeof(struct rb_node));
+   if (!z) { printf("malloc fail\n"); perror(0); exit(1); };
+   z->key = key; z->val = val;
    z->p = y;
    if (y == &nil) {
       t->root = z;

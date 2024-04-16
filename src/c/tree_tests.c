@@ -1,6 +1,8 @@
 
 #include "red_black_tree.h"
 #include "binary_search_tree.h"
+#include "generic_binary_search_tree.h"
+#include "generic_red_black_tree.h"
 #include "avl_tree.h"
 #include <stdio.h>
 #include <time.h>
@@ -8,6 +10,8 @@
 
 #define RESET() destroy_helper_rb(t.root); init_rb(&t)
 #define RESETAVL() destroy_helper_avl(v.root); init_avl(&v)
+#define RESETGRB() destroy_helper_grb(grb.root,&grb); \
+                   init_grb(compare_int_wrappers,free_int_wrapper,free_int_wrapper,&grb)
 
 
 #define TEST(name,condition) \
@@ -16,6 +20,27 @@
    if (res) printf("\033[32mPASSED\033[0m\n"); \
    else printf("\033[31mFAILED\033[0m\n")
 
+struct int_wrapper { int i; };
+
+int compare_int_wrappers(const void * a, const void * b) {
+   struct int_wrapper * real_a = (struct int_wrapper *)a;
+   struct int_wrapper * real_b = (struct int_wrapper *)b;
+   if (real_a->i < real_b->i)
+      return -1;
+   if (real_a->i > real_b->i)
+      return 1;
+   return 0;
+}
+
+void free_int_wrapper(void * a) {
+   free(a);
+}
+
+struct int_wrapper * new_int_wrapper(int i) {
+   struct int_wrapper * ret = malloc(sizeof(struct int_wrapper));
+   ret->i = i;
+   return ret;
+}
 
 
 int main(int argc, char ** argv) {
@@ -637,7 +662,6 @@ int main(int argc, char ** argv) {
    TEST("delete 4",get_rb(4,&t) == -1);
    delete_rb(7,&t);
    TEST("delete 7",get_rb(7,&t) == -1);
-   //in_orderer_print_rb(&t);
    delete_rb(5,&t);
    TEST("delete 5",get_rb(5,&t) == -1);
 
@@ -745,13 +769,563 @@ int main(int argc, char ** argv) {
 
    destroy_helper_bs(s.root);
 
+
+   printf("\n======= TEST GENERIC BINARY SEARCH TREE =======\n\n");
+
+
+   struct gbs_tree gs;
+   init_gbs(compare_int_wrappers,free_int_wrapper,free_int_wrapper,&gs);
+
+   struct int_wrapper test_key;
+
+   test_key.i = 5;
+   insert_gbs(new_int_wrapper(5),new_int_wrapper(5),&gs);
+   TEST("insert 5",(((struct int_wrapper *)(get_gbs(&test_key,&gs)))->i == test_key.i));
+   test_key.i = 2;
+   insert_gbs(new_int_wrapper(2),new_int_wrapper(4),&gs);
+   TEST("insert 2",(((struct int_wrapper *)(get_gbs(&test_key,&gs)))->i == 4));
+   test_key.i = 4;
+   insert_gbs(new_int_wrapper(4),new_int_wrapper(3),&gs);
+   TEST("insert 4",(((struct int_wrapper *)(get_gbs(&test_key,&gs)))->i == 3));
+   test_key.i = 3;
+   insert_gbs(new_int_wrapper(3),new_int_wrapper(2),&gs);
+   TEST("insert 3",(((struct int_wrapper *)(get_gbs(&test_key,&gs)))->i == 2));
+   test_key.i = 1;
+   insert_gbs(new_int_wrapper(1),new_int_wrapper(1),&gs);
+   TEST("insert 1",(((struct int_wrapper *)(get_gbs(&test_key,&gs)))->i == 1));
+   test_key.i = 7;
+   insert_gbs(new_int_wrapper(7),new_int_wrapper(6),&gs);
+   TEST("insert 7",(((struct int_wrapper *)(get_gbs(&test_key,&gs)))->i == 6));
+   test_key.i = 6;
+   insert_gbs(new_int_wrapper(6),new_int_wrapper(7),&gs);
+   TEST("insert 6",(((struct int_wrapper *)(get_gbs(&test_key,&gs)))->i == 7));
+   test_key.i = 8;
+   insert_gbs(new_int_wrapper(8),new_int_wrapper(8),&gs);
+   TEST("insert 8",(((struct int_wrapper *)(get_gbs(&test_key,&gs)))->i == 8));
+   test_key.i = 9;
+   insert_gbs(new_int_wrapper(9),new_int_wrapper(9),&gs);
+   TEST("insert 9",(((struct int_wrapper *)(get_gbs(&test_key,&gs)))->i == 9));
+
+   test_key.i = 5;
+   free(delete_gbs(&test_key,&gs));
+   TEST("delete 5",get_gbs(&test_key,&gs) == (void *)-1);
+   test_key.i = 1;
+   free(delete_gbs(&test_key,&gs));
+   TEST("delete 1",get_gbs(&test_key,&gs) == (void *)-1);
+   test_key.i = 9;
+   free(delete_gbs(&test_key,&gs));
+   TEST("delete 9",get_gbs(&test_key,&gs) == (void *)-1);
+   test_key.i = 7;
+   free(delete_gbs(&test_key,&gs));
+   TEST("delete 7",get_gbs(&test_key,&gs) == (void *)-1);
+   test_key.i = 6;
+   free(delete_gbs(&test_key,&gs));
+   TEST("delete 6",get_gbs(&test_key,&gs) == (void *)-1);
+   test_key.i = 2;
+   free(delete_gbs(&test_key,&gs));
+   TEST("delete 2",get_gbs(&test_key,&gs) == (void *)-1);
+   test_key.i = 4;
+   free(delete_gbs(&test_key,&gs));
+   TEST("delete 4",get_gbs(&test_key,&gs) == (void *)-1);
+   test_key.i = 3;
+   free(delete_gbs(&test_key,&gs));
+   TEST("delete 3",get_gbs(&test_key,&gs) == (void *)-1);
+   test_key.i = 8;
+   free(delete_gbs(&test_key,&gs));
+   TEST("delete 8",get_gbs(&test_key,&gs) == (void *)-1);
+
+   insert_gbs(new_int_wrapper(10),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(5),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(3),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(4),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(1),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(2),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(0),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(7),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(9),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(8),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(6),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(15),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(13),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(12),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(11),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(18),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(20),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(19),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(17),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(16),new_int_wrapper(1),&gs);
+   insert_gbs(new_int_wrapper(14),new_int_wrapper(1),&gs);
+
+   for (int i = 20; i; i--) {
+      test_key.i = i;
+      TEST("get i",((struct int_wrapper *)(get_gbs(&test_key,&gs)))->i == 1);
+      free(delete_gbs(&test_key.i,&gs));
+      TEST("delete i",get_gbs(&test_key,&gs) == (void *)-1);
+   }
+
+   destroy_helper_gbs(gs.root,&gs);
+
+   printf("\n======= GENERIC RED BLACK TREE TESTS =======\n\n");
+
+   struct grb_tree grb;
+   init_grb(compare_int_wrappers,free_int_wrapper,free_int_wrapper,&grb);
+
+   test_key.i = 11;
+   insert_grb(new_int_wrapper(11),new_int_wrapper(1),&grb);
+   TEST("insert 11",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 14;
+   insert_grb(new_int_wrapper(14),new_int_wrapper(1),&grb);
+   TEST("insert 14",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 2;
+   insert_grb(new_int_wrapper(2),new_int_wrapper(1),&grb);
+   TEST("insert 2",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 15;
+   insert_grb(new_int_wrapper(15),new_int_wrapper(1),&grb);
+   TEST("insert 15",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 1;
+   insert_grb(new_int_wrapper(1),new_int_wrapper(1),&grb);
+   TEST("insert 1",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 7;
+   insert_grb(new_int_wrapper(7),new_int_wrapper(1),&grb);
+   TEST("insert 7",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 8;
+   insert_grb(new_int_wrapper(8),new_int_wrapper(1),&grb);
+   TEST("insert 8",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 5;
+   insert_grb(new_int_wrapper(5),new_int_wrapper(1),&grb);
+   TEST("insert 5",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 4;
+   insert_grb(new_int_wrapper(4),new_int_wrapper(1),&grb);
+   TEST("insert 4",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+
+   RESETGRB();
+
+   test_key.i = 11;
+   insert_grb(new_int_wrapper(11),new_int_wrapper(1),&grb);
+   TEST("insert 11",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 2;
+   insert_grb(new_int_wrapper(2),new_int_wrapper(1),&grb);
+   TEST("insert 2",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 20;
+   insert_grb(new_int_wrapper(20),new_int_wrapper(1),&grb);
+   TEST("insert 20",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 1;
+   insert_grb(new_int_wrapper(1),new_int_wrapper(1),&grb);
+   TEST("insert 1",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 21;
+   insert_grb(new_int_wrapper(21),new_int_wrapper(1),&grb);
+   TEST("insert 21",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 15;
+   insert_grb(new_int_wrapper(15),new_int_wrapper(1),&grb);
+   TEST("insert 15",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 14;
+   insert_grb(new_int_wrapper(14),new_int_wrapper(1),&grb);
+   TEST("insert 14",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 16;
+   insert_grb(new_int_wrapper(16),new_int_wrapper(1),&grb);
+   TEST("insert 16",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 17;
+   insert_grb(new_int_wrapper(17),new_int_wrapper(1),&grb);
+   TEST("insert 17",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+
+   RESETGRB();
+
+   test_key.i = 11;
+   insert_grb(new_int_wrapper(11),new_int_wrapper(1),&grb);
+   TEST("insert 11",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 5;
+   insert_grb(new_int_wrapper(5),new_int_wrapper(1),&grb);
+   TEST("insert 5",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 15;
+   insert_grb(new_int_wrapper(15),new_int_wrapper(1),&grb);
+   TEST("insert 15",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 17;
+   insert_grb(new_int_wrapper(17),new_int_wrapper(1),&grb);
+   TEST("insert 17",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 19;
+   insert_grb(new_int_wrapper(19),new_int_wrapper(1),&grb);
+   TEST("insert 19",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+
+   RESETGRB();
+   
+   test_key.i = 11;
+   insert_grb(new_int_wrapper(11),new_int_wrapper(1),&grb);
+   TEST("insert 11",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 5;
+   insert_grb(new_int_wrapper(5),new_int_wrapper(1),&grb);
+   TEST("insert 5",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 15;
+   insert_grb(new_int_wrapper(15),new_int_wrapper(1),&grb);
+   TEST("insert 15",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 4;
+   insert_grb(new_int_wrapper(4),new_int_wrapper(1),&grb);
+   TEST("insert 4",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 3;
+   insert_grb(new_int_wrapper(3),new_int_wrapper(1),&grb);
+   TEST("insert 3",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 17;
+   insert_grb(new_int_wrapper(17),new_int_wrapper(1),&grb);
+   TEST("insert 17",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 19;
+   insert_grb(new_int_wrapper(19),new_int_wrapper(1),&grb);
+   TEST("insert 19",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 6;
+   insert_grb(new_int_wrapper(6),new_int_wrapper(1),&grb);
+   TEST("insert 6",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 7;
+   insert_grb(new_int_wrapper(7),new_int_wrapper(1),&grb);
+   TEST("insert 7",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 8;
+   insert_grb(new_int_wrapper(8),new_int_wrapper(1),&grb);
+   TEST("insert 8",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 9;
+   insert_grb(new_int_wrapper(9),new_int_wrapper(1),&grb);
+   TEST("insert 9",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 10;
+   insert_grb(new_int_wrapper(10),new_int_wrapper(1),&grb);
+   TEST("insert 10",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+
+   RESETGRB();
+
+   test_key.i = 20;
+   insert_grb(new_int_wrapper(20),new_int_wrapper(1),&grb);
+   TEST("insert 20",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 10;
+   insert_grb(new_int_wrapper(10),new_int_wrapper(1),&grb);
+   TEST("insert 10",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 25;
+   insert_grb(new_int_wrapper(25),new_int_wrapper(1),&grb);
+   TEST("insert 25",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 27;
+   insert_grb(new_int_wrapper(27),new_int_wrapper(1),&grb);
+   TEST("insert 27",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 2;
+   insert_grb(new_int_wrapper(2),new_int_wrapper(1),&grb);
+   TEST("insert 2",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 19;
+   insert_grb(new_int_wrapper(19),new_int_wrapper(1),&grb);
+   TEST("insert 19",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 22;
+   insert_grb(new_int_wrapper(22),new_int_wrapper(1),&grb);
+   TEST("insert 22",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 1;
+   insert_grb(new_int_wrapper(1),new_int_wrapper(1),&grb);
+   TEST("insert 1",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 3;
+   insert_grb(new_int_wrapper(3),new_int_wrapper(1),&grb);
+   TEST("insert 3",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 18;
+   insert_grb(new_int_wrapper(18),new_int_wrapper(1),&grb);
+   TEST("insert 18",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 17;
+   insert_grb(new_int_wrapper(17),new_int_wrapper(1),&grb);
+   TEST("insert 17",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 16;
+   insert_grb(new_int_wrapper(16),new_int_wrapper(1),&grb);
+   TEST("insert 16",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 15;
+   insert_grb(new_int_wrapper(15),new_int_wrapper(1),&grb);
+   TEST("insert 15",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 14;
+   insert_grb(new_int_wrapper(14),new_int_wrapper(1),&grb);
+   TEST("insert 14",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 13;
+   insert_grb(new_int_wrapper(13),new_int_wrapper(1),&grb);
+   TEST("insert 13",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 12;
+   insert_grb(new_int_wrapper(12),new_int_wrapper(1),&grb);
+   TEST("insert 12",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   test_key.i = 11;
+   insert_grb(new_int_wrapper(11),new_int_wrapper(1),&grb);
+   TEST("insert 11",((struct int_wrapper *)(get_grb(&test_key,&grb)))->i == 1);
+   
+   RESETGRB();
+
+   insert_grb(new_int_wrapper(11),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(5),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(15),new_int_wrapper(1),&grb);
+
+   test_key.i = 5;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 5",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 15;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 15",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 11;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 11",get_grb(&test_key,&grb) == (void *)-1);
+   
+   RESETGRB();
+
+   insert_grb(new_int_wrapper(11),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(2),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(20),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(1),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(21),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(15),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(14),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(16),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(17),new_int_wrapper(1),&grb);
+   
+   test_key.i = 11;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 11",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 2;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 2",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 20;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 20",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 1;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 1",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 17;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 17",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 16;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 16",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 14;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 14",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 15;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 15",get_grb(&test_key,&grb) == (void *)-1);
+
+   RESETGRB();
+
+   insert_grb(new_int_wrapper(11),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(2),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(20),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(1),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(21),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(15),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(14),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(16),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(17),new_int_wrapper(1),&grb);
+
+   test_key.i = 15;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 15",get_grb(&test_key,&grb) == (void *)-1);
+
+   RESETGRB();
+
+   insert_grb(new_int_wrapper(11),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(2),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(20),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(1),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(21),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(15),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(14),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(16),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(17),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(18),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(19),new_int_wrapper(1),&grb);
+
+   test_key.i = 15;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 15",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 14;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 14",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 17;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 17",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 16;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 16",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 11;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 11",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 2;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 2",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 20;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 20",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 19;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 19",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 18;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 18",get_grb(&test_key,&grb) == (void *)-1);
+
+   RESETGRB();
+   
+   insert_grb(new_int_wrapper(20),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(10),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(25),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(27),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(2),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(19),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(22),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(1),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(3),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(18),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(17),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(16),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(15),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(14),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(13),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(12),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(11),new_int_wrapper(1),&grb);
+
+   test_key.i = 18;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 18",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 17;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 17",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 15;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 15",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 19;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 19",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 27;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 27",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 11;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 11",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 20;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 20",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 12;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 12",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 22;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 22",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 14;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 14",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 13;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 13",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 10;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 10",get_grb(&test_key,&grb) == (void *)-1);
+
+   RESETGRB();
+
+   insert_grb(new_int_wrapper(20),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(19),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(21),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(18),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(22),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(17),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(23),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(16),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(24),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(15),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(25),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(14),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(26),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(13),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(27),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(12),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(28),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(11),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(29),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(11),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(30),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(10),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(31),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(9),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(32),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(8),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(33),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(7),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(34),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(6),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(35),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(5),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(36),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(4),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(37),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(3),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(38),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(2),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(39),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(1),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(40),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(0),new_int_wrapper(1),&grb);
+   
+   test_key.i = 33;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 33",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 34;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 34",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 25;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 25",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 35;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 35",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 36;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 36",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 38;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 38",get_grb(&test_key,&grb) == (void *)-1);
+
+   RESETGRB();
+
+   insert_grb(new_int_wrapper(5),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(7),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(4),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(2),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(3),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(1),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(0),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(9),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(6),new_int_wrapper(1),&grb);
+   insert_grb(new_int_wrapper(8),new_int_wrapper(1),&grb);
+
+   test_key.i = 0;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 0",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 1;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 1",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 6;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 6",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 8;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 8",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 9;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 9",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 3;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 3",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 2;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 2",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 4;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 4",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 7;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 7",get_grb(&test_key,&grb) == (void *)-1);
+   test_key.i = 5;
+   free(delete_grb(&test_key,&grb));
+   TEST("delete 5",get_grb(&test_key,&grb) == (void *)-1);
+
+   destroy_helper_grb(grb.root,&grb);
+
+
+   /*
    printf("\n======= TEST AVL SEARCH TREE =======\n\n");
 
    struct avl_tree v;
 
    v.root = 0;
 
-   /* same insert tests from red black tree */
+   / same insert tests from red black tree /
 
    insert_avl(11,1,&v);
    TEST("insert 11",get_avl(11,&v));
@@ -873,7 +1447,7 @@ int main(int argc, char ** argv) {
 
    RESETAVL();
 
-   /* test double rotation case */
+   / test double rotation case /
 
    insert_avl(15,1,&v);
    TEST("insert 15",get_avl(11,&v));
@@ -951,7 +1525,6 @@ int main(int argc, char ** argv) {
    TEST("delete 20",get_avl(20,&v) == -1);
    delete_avl(1,&v);
    in_order_print_avl(&v);
-   /*
    TEST("delete 1",get_avl(1,&v) == -1);
    delete_avl(17,&v);
    TEST("delete 17",get_avl(17,&v) == -1);
@@ -1158,8 +1731,8 @@ int main(int argc, char ** argv) {
    TEST("delete 5",get_avl(5,&v) == -1);
    in_order_print_avl(&v);
 
-   */
    destroy_helper_avl(v.root);
+   */
 
    }
    else if (mode == 2) 
@@ -1169,7 +1742,7 @@ int main(int argc, char ** argv) {
    clock_t start;
    double res[2];
 
-   while (cycles < 0x00ffffff) {
+   while (cycles < 0x0fffffff) {
       printf("\n======= TIMING %d TREE INSERTIONS =======\n",cycles);
       struct rb_tree t;
       struct bs_tree s;
