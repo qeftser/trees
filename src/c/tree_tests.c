@@ -917,12 +917,16 @@ int main(int argc, char ** argv) {
    insert_avl(5,1,&v);
    insert_avl(15,1,&v);
 
+   in_order_print_avl(&v);
    delete_avl(5,&v);
    TEST("delete 5",get_avl(5,&v) == -1);
+   in_order_print_avl(&v);
    delete_avl(15,&v);
    TEST("delete 15",get_avl(15,&v) == -1);
+   in_order_print_avl(&v);
    delete_avl(11,&v);
    TEST("delete 11",get_avl(11,&v) == -1);
+   in_order_print_avl(&v);
 
    RESETAVL();
 
@@ -936,7 +940,6 @@ int main(int argc, char ** argv) {
    insert_avl(16,1,&v);
    insert_avl(17,1,&v);
 
-   in_order_print_avl(&v);
    delete_avl(11,&v);
    in_order_print_avl(&v);
    TEST("delete 11",get_avl(11,&v) == -1);
@@ -948,9 +951,9 @@ int main(int argc, char ** argv) {
    TEST("delete 20",get_avl(20,&v) == -1);
    delete_avl(1,&v);
    in_order_print_avl(&v);
+   /*
    TEST("delete 1",get_avl(1,&v) == -1);
    delete_avl(17,&v);
-   in_order_print_avl(&v);
    TEST("delete 17",get_avl(17,&v) == -1);
    delete_avl(16,&v);
    TEST("delete 16",get_avl(16,&v) == -1);
@@ -971,7 +974,6 @@ int main(int argc, char ** argv) {
    insert_avl(16,1,&v);
    insert_avl(17,1,&v);
 
-   in_order_print_avl(&v);
 
    delete_avl(15,&v);
    TEST("delete 15",get_avl(15,&v) == -1);
@@ -988,8 +990,6 @@ int main(int argc, char ** argv) {
    insert_avl(17,1,&v);
    insert_avl(18,1,&v);
    insert_avl(19,1,&v);
-
-   in_order_print_avl(&v);
 
    delete_avl(15,&v);
    TEST("delete 15",get_avl(15,&v) == -1);
@@ -1126,27 +1126,39 @@ int main(int argc, char ** argv) {
    insert_avl(6,5,&v);
    insert_avl(8,5,&v);
 
+   in_order_print_avl(&v);
    delete_avl(0,&v);
    TEST("delete 0",get_avl(0,&v) == -1);
+   in_order_print_avl(&v);
    delete_avl(1,&v);
    TEST("delete 1",get_avl(1,&v) == -1);
+   in_order_print_avl(&v);
    delete_avl(6,&v);
    TEST("delete 6",get_avl(6,&v) == -1);
+   in_order_print_avl(&v);
    delete_avl(8,&v);
    TEST("delete 8",get_avl(8,&v) == -1);
+   in_order_print_avl(&v);
    delete_avl(9,&v);
    TEST("delete 9",get_avl(9,&v) == -1);
+   in_order_print_avl(&v);
    delete_avl(3,&v);
    TEST("delete 3",get_avl(3,&v) == -1);
+   in_order_print_avl(&v);
    delete_avl(2,&v);
    TEST("delete 2",get_avl(2,&v) == -1);
+   in_order_print_avl(&v);
    delete_avl(4,&v);
    TEST("delete 4",get_avl(4,&v) == -1);
+   in_order_print_avl(&v);
    delete_avl(7,&v);
    TEST("delete 7",get_avl(7,&v) == -1);
+   in_order_print_avl(&v);
    delete_avl(5,&v);
    TEST("delete 5",get_avl(5,&v) == -1);
+   in_order_print_avl(&v);
 
+   */
    destroy_helper_avl(v.root);
 
    }

@@ -1,236 +1,110 @@
 
-/**
- * An implementation of a generic binary search tree.
- *
- * @param <K> Type to use as key
- * @param <V> Type to store as value
- *
- * @author Caleb Pollock
- */
-public class BinarySearchTree<K extends Comparable<K>,V> implements BinaryTreeInterface<K,V> {
-
+public class BinarySearchTree {
    private int size;
-   private int depth; /* this will only really grow - there is not a good way to decrease it */
-   private int totalQueries;
-   private int totalTraversals;
-   private BSTNode<K,V> head;
+   private BSNode root;
 
-   private class BSTNode<K extends Comparable<K>,V> {
-      public K key;
-      public V value;
-      public BSTNode<K,V> parent;
-      public BSTNode<K,V> right;
-      public BSTNode<K,V> left;
+   private class BSNode {
+      public int key;
+      public int val;
+      public BSNode l;
+      public BSNode r;
 
-      BSTNode(K key,V value) {
+      public BSNode(int key, int val) {
          this.key = key;
-         this.value = value;
-         parent = null;
-         right = null;
-         left = null;
+         this.val = val;
+         l = r = null;
       }
    }
 
-   BinarySearchTree() {
-      size = 0;
-      depth = 0;
-      totalQueries = 0;
-      totalTraversals = 0;
-      head = null;
-   }
-
-   public int getSize() {
-      return this.size;
-   }
-
-   public int getDepth() {
-      return this.depth;
-   }
-
-   public void insert(K key, V value) {
-      BSTNode<K,V> newNode = new BSTNode<K,V>(key,value);
-      int currDepth = 0;
-      BSTNode<K,V> currNode = this.head;
-      this.size++;
-
-      if (currNode == null) {
-         head = newNode;
+   public void insert(int key, int val) {
+      BSNode y = null, z = root;
+      if (z == null) {
+         root = new BSNode(key,val);
+         size++;
          return;
       }
-
-      while (true) {
-         if (currNode.key.equals(key)) {
-            currNode.value = value;
-            size--;
+      while (z != null) {
+         y = z;
+         if (key == z.key) {
+            z.val = val;
             return;
          }
-         else if (currNode.key.compareTo(key) > 0) {
-            if (currNode.left == null) {
-               currNode.left = newNode;
-               newNode.parent = currNode;
-               if (++currDepth > depth) depth = currDepth;
-               return;
-            }
-            currNode = currNode.left;
-            currDepth++;
+         if (key < z.key) {
+            z = z.l;
          }
-         else {
-            if (currNode.right == null) {
-               currNode.right = newNode;
-               newNode.parent = currNode;
-               if (++currDepth > depth) depth = currDepth;
-               return;
-            }
-            currNode = currNode.right;
-            currDepth++;
-         }
+         else z = z.r;
       }
+
+      z = new BSNode(key,val);
+
+      if (key < y.key) {
+         y.l = z;
+      }
+      else y.r = z;
+
+      size++;
    }
 
-   public V get(K key) {
-      if (head == null || key == null) {
-         return null;
+   public int get(int key) {
+      BSNode z = root;
+      while (z != null) {
+         if (key == z.key) return z.val;
+         else if (key < z.key) z = z.l;
+         else z = z.r;
       }
-
-      BSTNode<K,V> currNode = this.head;
-
-      while (currNode != null) {
-         if (currNode.key.equals(key)) {
-            return currNode.value;
-         }
-         else if (currNode.key.compareTo(key) > 0) {
-            currNode = currNode.left;
-         }
-         else currNode = currNode.right;
-      }
-
-      return null;
+      return -1;
    }
 
-   private BSTNode<K,V> getPredecessor(BSTNode<K,V> start) {
-      if (start == null || start.left == null) return null;
-      BSTNode<K,V> currNode = start.left;
-      while (currNode.right != null) {
-         currNode = currNode.right;
+   private void transplant(BSNode u, BSNode up, BSNode v) {
+      if (up == null) {
+         root = v;
       }
-
-      return currNode;
+      else if (u == up.l) up.l = v;
+      else up.r = v;
    }
 
-   private BSTNode<K,V> getSuccessor(BSTNode<K,V> start) {
-      if (start == null || start.right == null) return null;
-      BSTNode<K,V> currNode = start.right;
-      while (currNode.left != null) {
-         currNode = currNode.left;
+   public int delete(int key) {
+      BSNode zp = null, z = root;
+      while (z != null) {
+         if (key == z.key) break;
+         zp = z;
+         if (key < z.key) z = z.l;
+         else z = z.r;
       }
+      if (z == null) return -1;
 
-      return currNode;
-   }
-
-   public V delete(K key) {
-      if (head == null) {
-         return null;
-      }
-
-      BSTNode<K,V> toRemove = head;
-      while (toRemove != null) {
-         if (toRemove.key.equals(key)) {
-            break;
-         }
-         else if (toRemove.key.compareTo(key) > 0) {
-            toRemove = toRemove.left;
-         }
-         else {
-            toRemove = toRemove.right;
-         }
-      }
-      
-      if (toRemove == null) {
-         return null;
-      }
-
-      BSTNode<K,V> replace = getSuccessor(toRemove);
-      if (replace == null) replace = getPredecessor(toRemove);
-      if (replace == null) {
-         if (head == toRemove) {
-            head = null;
-         }
-         else if (toRemove.parent.left == toRemove) {
-            if (toRemove.parent.key == head.key) {
-              head.left = null;
-            }
-            else {
-               toRemove.parent.left = null;
-            }
-         }
-         else {
-            if (toRemove.parent.key == head.key) {
-               head.right = null;
-            }
-            else {
-               toRemove.parent.right = null;
-            }
-         }
-         size--;
-         return toRemove.value;
-      }
-
-      V retVal = toRemove.value;
-
-      if (replace.parent.left == replace) {
-         if (replace.right == null) {
-            if (replace.parent.key == head.key) {
-               toRemove.value = replace.value;
-               toRemove.key = replace.key;
-               head.left = replace.left;
-            }
-            else {
-               toRemove.value = replace.value;
-               toRemove.key = replace.key;
-               replace.parent.left = replace.left;
-            }
-         }
-         else {
-            toRemove.value = replace.value;
-            toRemove.key = replace.key;
-            replace.parent.left = replace.right;
-         }
+      BSNode sp = null, s;
+      if (z.r != null && z.r.l == null) {
+         s = z.r;
+         transplant(z,zp,s);
+         s.l = z.l;
       }
       else {
-         if (replace.left == null) {
-            if (replace.parent.key == head.key) {
-               toRemove.value = replace.value;
-               toRemove.key = replace.key;
-               head.right = replace.right;
-            }
-            else {
-               toRemove.value = replace.value;
-               toRemove.key = replace.key;
-               replace.parent.right = replace.right;
-            }
-         }
-         else {
-            toRemove.value = replace.value;
-            toRemove.key = replace.key;
-            replace.parent.right = replace.left;
+         s = z.l;
+         if (s != null) while(s.r != null) { sp = s; s = s.r; }
+         if (sp != null) sp.r = s.l;
+         transplant(z,zp,s);
+         if (s != null) {
+            if (z.l != s) s.l = z.l;
+            s.r = z.r;
          }
       }
-      
+
       size--;
-      return retVal;
+      return z.val;
    }
 
-   private void printInOrderHelper(BSTNode<K,V> c) {
-      if (c == null) return;
-
-      printInOrderHelper(c.left);
-      System.out.print("<" + c.key.toString() + "," + c.value.toString() + "> ");
-      printInOrderHelper(c.right);
+   private void inOrderPrintHelper(BSNode n) {
+      if (n == null) return;
+      System.out.print("l");
+      inOrderPrintHelper(n.l);
+      System.out.printf("%d ",n.key);
+      System.out.print("r");
+      inOrderPrintHelper(n.r);
    }
 
-   public void printInOrder() {
-      printInOrderHelper(head);
+   public void inOrderPrint() {
+      inOrderPrintHelper(root);
       System.out.println();
    }
-
 }

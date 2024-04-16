@@ -93,7 +93,7 @@ struct avl_node * lr_rotate(struct avl_node * x, struct avl_node * z) {
    }
    y->l = z;
    z->p = y;
-   y->l = t2;
+   x->l = t2;
    if (t2) {
       t2->p = x;
    }
@@ -116,22 +116,6 @@ struct avl_node * lr_rotate(struct avl_node * x, struct avl_node * z) {
 }
 
 void transplant_avl(struct avl_node * old, struct avl_node * new, struct avl_tree * t) {
-   if (new == 0) {
-      printf("old: %p\n",old);
-      printf("old->p: %p\n",old->p);
-      if (old->p)
-         printf("old->p->l: %p\n",old->p->l);
-      if (old->p == 0) {
-         printf("old->p: %p\n",old->p);
-         t->root = 0;
-      }
-      else if (old->p->l == old) {
-         printf("old->p: %p\n",old->p);
-         old->p->l = 0;
-      }
-      else old->p->r = 0;
-      return;
-   }
    if (old->p == 0) {
       t->root = new;
    }
@@ -139,10 +123,10 @@ void transplant_avl(struct avl_node * old, struct avl_node * new, struct avl_tre
       old->p->l = new;
    }
    else old->p->r = new;
-   new->p = old->p;
-   //new->l = old->l;
-   //new->r = old->r;
-   new->diff = old->diff;
+   if (new) { 
+      new->p = old->p;
+      new->diff = old->diff;
+   }
 }
 
 struct avl_node * minimum_avl(struct avl_node * s) {
@@ -278,23 +262,18 @@ void delete_fixup_avl(struct avl_node * n, struct avl_tree * t) {
             z = x->r;
             b = z->diff;
             if (b < 0) {
-               printf("1\n");
                n = rl_rotate(x,z);
             }
             else {
-               printf("2\n");
                n= ll_rotate(x,z);
             }
          }
          else {
             if (x->diff == 0) {
-               printf("3\n");
                x->diff = +1;
                break;
             }
-            printf("4\n");
             n = x;
-            printf("n: %d\n",x->key);
             n->diff = 0;
             continue;
          }
@@ -305,20 +284,16 @@ void delete_fixup_avl(struct avl_node * n, struct avl_tree * t) {
             b = z->diff;
             if (b > 0) {
                n = lr_rotate(x,z);
-               printf("5\n");
             }
             else {
-               printf("6\n");
                n = rr_rotate(x,z);
             }
          }
          else {
             if (x->diff == 0) {
-               printf("7\n");
                x->diff = -1;
                break;
             }
-            printf("8\n");
             n = x;
             n->diff = 0;
             continue;
@@ -356,30 +331,43 @@ int delete_avl(int key, struct avl_tree * t) {
 
    if (z == 0) return -1;
 
-   struct avl_node * x, * n, * y = z;
-
-   if (z->l == 0) {
-      transplant_avl(z,z->r,t);
+   struct avl_node * x, * xp = 0, * n, * y = z;
+   if (!z->r && !z->l) {
+      if (!z->p) {
+         t->root = 0;
+      }
+      else if (z == z->p->l) {
+         z->p->l = 0;
+         z->p->diff++;
+      }
+      else {
+         z->p->r = 0;
+         z->p->diff--;
+      }
+      xp = z->p;
    }
-   else if (z->r == 0) {
-      transplant_avl(z,z->l,t);
+   else if (z->r && !z->r->l) {
+      x = z->r;
+      transplant_avl(z,x,t);
+      x->l = z->l;
+      if (x->l) x->l->p = x;
+      if (x->r) x->r->p = x;
    }
    else {
-      y = maximum_avl(z->l);
-      delete_fixup_avl(y,t);
-      x = y->l;
-      printf("x: %p\n",x);
-      if (y->p == z) { if (x) x->p = y; }
-      else {
-         transplant_avl(y,y->l,t);
-         y->l = z->l;
-         y->l->p = y;
+      x = z->l;
+      if (x) while(x->r) { xp = x; x = x->r; }
+      if (xp) xp->r = x->l;
+      transplant_avl(z,x,t);
+      if (x) {
+         if (z->l != x) x->l = z->l;
+         x->r = z->r;
+         if (x->l) x->l->p = x;
+         if (x->r) x->r->p = x;
       }
-      transplant_avl(z,y,t);
-      y->r = z->r;
-      if (y->r) y->r->p = y;
-      y->diff = z->diff;
    }
+
+   if (xp) delete_fixup_avl(xp,t);
+
    ret_val = z->val;
    free(z);
    return ret_val;
