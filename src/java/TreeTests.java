@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Functionality tests for the implimented trees
+ * @author Caleb Pollock
+ */
 class TreeTests {
    private RedBlackTree rb;
    private BinarySearchTree bs;

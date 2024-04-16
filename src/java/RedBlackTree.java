@@ -1,4 +1,8 @@
 
+/**
+ * Red Black Tree Implimentation
+ * @author Caleb Pollock
+ */
 public class RedBlackTree {
    private int size;
    private RBNode root;
@@ -6,6 +10,9 @@ public class RedBlackTree {
    private final int red = 1;
    private final int black = 0;
 
+   /**
+    * Container for elements in the tree
+    */
    private class RBNode {
       public int key;
       public int val;
@@ -31,6 +38,10 @@ public class RedBlackTree {
       root = nil;
    }
 
+   /**
+    * Perform a left rotation on the given node
+    * @param x - the node to left rotate
+    */
    private void leftRotate(RBNode x) {
       RBNode y = x.r;
       x.r = y.l;
@@ -49,6 +60,10 @@ public class RedBlackTree {
       x.p = y;
    }
 
+   /**
+    * Perform a right rotation on the given node
+    * @param x - the node to right rotate
+    */
    private void rightRotate(RBNode y) {
       RBNode x = y.l;
       y.l = x.r;
@@ -67,6 +82,11 @@ public class RedBlackTree {
       y.p = x;
    }
 
+   /**
+    * Does maintenance on the tree to ensure that
+    * the red-black properties are upheld
+    * @param z - the node to start from
+    */
    private void insertFixup(RBNode z) {
       while (z.p.color == red) {
          if (z.p == z.p.p.l) {
@@ -109,6 +129,11 @@ public class RedBlackTree {
       root.color = black;
    }
 
+   /**
+    * Add an element to the tree.
+    * @param key - the key to add
+    * @param val - the value associated with the key
+    */
    public void insert(int key, int val) {
       RBNode z = new RBNode(key,val);
       RBNode y = nil;
@@ -138,6 +163,12 @@ public class RedBlackTree {
       insertFixup(z);
    }
 
+   /**
+    * move new node to old node's position, updating 
+    * pointers.
+    * @param old - old node
+    * @param new - new node
+    */
    private void transplant(RBNode old, RBNode newv) {
       if (old.p == nil) {
          root = newv;
@@ -149,6 +180,10 @@ public class RedBlackTree {
       newv.p = old.p;
    }
 
+   /**
+    * @param s - the subtree root
+    * @return the minimum value in a subtree rooted at s
+    */
    private RBNode minimum(RBNode s) {
       while (s.l != nil) {
          s = s.l;
@@ -156,6 +191,10 @@ public class RedBlackTree {
       return s;
    }
 
+   /**
+    * @param s - the subtree root
+    * @return the maximum value in a subtree rooted at s
+    */
    private RBNode maximum(RBNode s) {
       while (s.r != nil) {
          s = s.r;
@@ -163,6 +202,11 @@ public class RedBlackTree {
       return s;
    }
 
+   /**
+    * Does maintenance on the tree to ensure that
+    * the red-black properties are upheld
+    * @param z - the node to start from
+    */
    private void deleteFixup(RBNode x) {
       while (x != root && x.color == black) {
          if (x == x.p.l) {
@@ -221,6 +265,13 @@ public class RedBlackTree {
       x.color = black;
    }
 
+   /**
+    * delete the node with the associated
+    * key if it exists
+    * @param key - the key to look for
+    * @return the value associated with the key
+    *         or -1 if no element is found
+    */
    public int delete(int key) {
       RBNode z = root;
       int ret_val = -1;
@@ -264,6 +315,12 @@ public class RedBlackTree {
       return z.val;
    }
 
+   /**
+    * query the tree for an element
+    * @param key - the key to look for
+    * @return the value associated with the key
+    *         or -1 if no element is found
+    */
    public int get(int key) {
       RBNode z = root;
       while (z != nil) {
@@ -274,6 +331,9 @@ public class RedBlackTree {
       return -1;
    }
 
+   /**
+    * helper method for inOrderPrint
+    */
    private void inOrderPrintHelper(RBNode n) {
       if (n == nil) return;
       System.out.print("l");
@@ -283,11 +343,13 @@ public class RedBlackTree {
       inOrderPrintHelper(n.r);
    }
 
+   /**
+    * Print the elements as well as left and right decension 
+    * markers for the binary search tree.
+    */
    public void inOrderPrint() {
       inOrderPrintHelper(root);
       System.out.println();
    }
-
-   
 }
 

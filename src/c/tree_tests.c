@@ -1247,66 +1247,70 @@ int main(int argc, char ** argv) {
       init_bs(&s);
       init_rb(&t);
 
-      printf("\n=== ORDERED INPUT ===\n");
+      if (cycles < 10000000) {
 
-      printf("Results:\n");
+         printf("\n=== ORDERED INPUT ===\n");
 
-      start = clock();
-      for (int i = 0; i < cycles; i++) {
-         insert_bs(i,i,&s);
+         printf("Results:\n");
+
+         start = clock();
+         for (int i = 0; i < cycles; i++) {
+            insert_bs(i,i,&s);
+         }
+         res[0] = (double)(clock() - start)/CLOCKS_PER_SEC;
+
+         start = clock();
+         for (int i = 0; i < cycles; i++) {
+            insert_rb(i,i,&t);
+         }
+         res[1] = (double)(clock() - start)/CLOCKS_PER_SEC;
+
+         printf("Binary Search Tree (Inserts)   :");
+         if (res[0] > res[1]) printf("\033[31m"); else printf("\033[32m");
+         printf(" %f\033[0m\n",res[0]);
+         printf("Red Black Tree     (Inserts)   :"); 
+         if (res[1] > res[0]) printf("\033[31m"); else printf("\033[32m");
+         printf(" %f\033[0m\n",res[1]);
+
+         start = clock();
+         for (int i = 0; i < cycles; i++) {
+            get_bs(i,&s);
+         }
+         res[0] = (double)(clock() - start)/CLOCKS_PER_SEC;
+
+         start = clock();
+         for (int i = 0; i < cycles; i++) {
+            get_rb(i,&t);
+         }
+         res[1] = (double)(clock() - start)/CLOCKS_PER_SEC;
+
+         printf("Binary Search Tree (Queries)   :");
+         if (res[0] > res[1]) printf("\033[31m"); else printf("\033[32m");
+         printf(" %f\033[0m\n",res[0]);
+         printf("Red Black Tree     (Queries)   :"); 
+         if (res[1] > res[0]) printf("\033[31m"); else printf("\033[32m");
+         printf(" %f\033[0m\n",res[1]);
+
+         start = clock();
+         for (int i = 0; i < cycles; i++) {
+            delete_bs(i,&s);
+         }
+         res[0] = (double)(clock() - start)/CLOCKS_PER_SEC;
+
+         start = clock();
+         for (int i = 0; i < cycles; i++) {
+            delete_rb(i,&t);
+         }
+         res[1] = (double)(clock() - start)/CLOCKS_PER_SEC;
+
+         printf("Binary Search Tree (Deletes)   :");
+         if (res[0] > res[1]) printf("\033[31m"); else printf("\033[32m");
+         printf(" %f\033[0m\n",res[0]);
+         printf("Red Black Tree     (Deletes)   :"); 
+         if (res[1] > res[0]) printf("\033[31m"); else printf("\033[32m");
+         printf(" %f\033[0m\n",res[1]);
+
       }
-      res[0] = (double)(clock() - start)/CLOCKS_PER_SEC;
-
-      start = clock();
-      for (int i = 0; i < cycles; i++) {
-         insert_rb(i,i,&t);
-      }
-      res[1] = (double)(clock() - start)/CLOCKS_PER_SEC;
-
-      printf("Binary Search Tree (Inserts)   :");
-      if (res[0] > res[1]) printf("\033[31m"); else printf("\033[32m");
-      printf(" %f\033[0m\n",res[0]);
-      printf("Red Black Tree     (Inserts)   :"); 
-      if (res[1] > res[0]) printf("\033[31m"); else printf("\033[32m");
-      printf(" %f\033[0m\n",res[1]);
-
-      start = clock();
-      for (int i = 0; i < cycles; i++) {
-         get_bs(i,&s);
-      }
-      res[0] = (double)(clock() - start)/CLOCKS_PER_SEC;
-
-      start = clock();
-      for (int i = 0; i < cycles; i++) {
-         get_rb(i,&t);
-      }
-      res[1] = (double)(clock() - start)/CLOCKS_PER_SEC;
-
-      printf("Binary Search Tree (Queries)   :");
-      if (res[0] > res[1]) printf("\033[31m"); else printf("\033[32m");
-      printf(" %f\033[0m\n",res[0]);
-      printf("Red Black Tree     (Queries)   :"); 
-      if (res[1] > res[0]) printf("\033[31m"); else printf("\033[32m");
-      printf(" %f\033[0m\n",res[1]);
-
-      start = clock();
-      for (int i = 0; i < cycles; i++) {
-         delete_bs(i,&s);
-      }
-      res[0] = (double)(clock() - start)/CLOCKS_PER_SEC;
-
-      start = clock();
-      for (int i = 0; i < cycles; i++) {
-         delete_rb(i,&t);
-      }
-      res[1] = (double)(clock() - start)/CLOCKS_PER_SEC;
-
-      printf("Binary Search Tree (Deletes)   :");
-      if (res[0] > res[1]) printf("\033[31m"); else printf("\033[32m");
-      printf(" %f\033[0m\n",res[0]);
-      printf("Red Black Tree     (Deletes)   :"); 
-      if (res[1] > res[0]) printf("\033[31m"); else printf("\033[32m");
-      printf(" %f\033[0m\n",res[1]);
 
       free(elements);
       destroy_helper_rb(t.root);
