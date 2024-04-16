@@ -114,6 +114,9 @@ public class RedBlackTree {
       RBNode y = nil;
       RBNode x = root;
       while (x != nil) {
+         if (x.key == key) {
+            x.val = val; return;
+         }
          y = x;
          if (z.key < x.key) {
             x = x.l;
@@ -131,6 +134,7 @@ public class RedBlackTree {
       z.l = nil;
       z.r = nil;
       z.color = red;
+      size++;
       insertFixup(z);
    }
 
@@ -256,8 +260,8 @@ public class RedBlackTree {
       if (y_og_color == black) {
          deleteFixup(x);
       }
-      ret_val = z.val;
-      return ret_val;
+      size--;
+      return z.val;
    }
 
    public int get(int key) {

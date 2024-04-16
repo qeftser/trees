@@ -98,6 +98,10 @@ void insert_rb(int key, int val, struct rb_tree * t) {
    struct rb_node * y = &nil;
    struct rb_node * x = t->root;
    while (x != &nil) {
+      if (x->key == key) {
+         x->val = val;
+         return;
+      }
       y = x;
       if (z->key < x->key) {
          x = x->l;
@@ -115,6 +119,7 @@ void insert_rb(int key, int val, struct rb_tree * t) {
    z->l = &nil;
    z->r = &nil;
    z->color = red;
+   t->size++;
    rb_insert_fixup(z,t);
 }
 
@@ -242,6 +247,7 @@ int delete_rb(int key, struct rb_tree * t) {
    }
    ret_val = z->val;
    free(z);
+   t->size--;
    return ret_val;
 }
 
