@@ -33,6 +33,7 @@ public class RedBlackTree {
 
    private void leftRotate(RBNode x) {
       RBNode y = x.r;
+      x.r = y.l;
       if (y.l != nil) {
          y.l.p = x;
       }
