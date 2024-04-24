@@ -1,4 +1,4 @@
-qeftser@greyscale:~/projects/trees$ cd ./bin && java TreeTimeTests && cd ..
+ cd ./bin && java TreeTimeTests && cd ..
 
 ======= TIMING 100 TREE INSERTIONS =======
 
@@ -118,14 +118,8 @@ Results:
 Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
 	at BinarySearchTree.insert(BinarySearchTree.java:50)
 	at TreeTimeTests.main(TreeTimeTests.java:40)
-qeftser@greyscale:~/projects/trees/bin$ make c
-make: *** No rule to make target 'c'.  Stop.
-qeftser@greyscale:~/projects/trees/bin$ cd ..
-qeftser@greyscale:~/projects/trees$ make c
-gcc src/c/avl_tree.o src/c/binary_search_tree.o src/c/generic_binary_search_tree.o src/c/generic_red_black_tree.o src/c/red_black_tree.o src/c/tree_tests.o src/c/avl_tree.h src/c/binary_search_tree.h src/c/generic_binary_search_tree.h src/c/generic_red_black_tree.h src/c/red_black_tree.h -O3  -o ./bin/c_tst.e 
-qeftser@greyscale:~/projects/trees$ ./bin/c_tst.e 
-usage: ././bin/c_tst.e [1|2]
-qeftser@greyscale:~/projects/trees$ ./bin/c_tst.e 2
+
+ ./bin/c_tst.e 2
 
 ======= TIMING 100 TREE INSERTIONS =======
 
@@ -248,6 +242,5 @@ Binary Search Tree (Queries)   : 231.436482
 Red Black Tree     (Queries)   : 109.824046
 Binary Search Tree (Deletes)   : 223.728083
 Red Black Tree     (Deletes)   : 232.912434
-qeftser@greyscale:~/projects/trees$ 
 
 
